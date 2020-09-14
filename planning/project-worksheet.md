@@ -12,7 +12,7 @@
 |Day 5| Final Touches and Present | Incomplete
 
 ## Backend
-Click [here](https://github.com/krislee/project4-backend) to view repository.
+Click [here](https://github.com/krislee/project4-backend) to view backend repository.
 
 ## Project Description
 The Book Collection Tracker is a tracker for book lovers and students to keep track of the books they are readind. It will allow them to track the progress of their reading status of each book and what they thought of the book. The frontend application is built using Vue framework and Boostrap CSS library. The tracker allows user to sign up and login to their book collection. The book collection will consist of a genre dashboard, listing all the genres the user has made, and a book dashboard, listing all the books of each genre the user has created. The user also has the option of updating and deleting the genres or books in their respective dashboards. 
@@ -30,14 +30,14 @@ User can update or delete the book
 
 ## Wireframe
 
-- [Mobile](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600036729/Screen_Shot_2020-09-12_at_11.47.47_AM_fue0tb.png)
-- [Tablet](https://git.generalassemb.ly/SEIR-629/project-1-portfolio/blob/master/readme-assets/nav-highlight.gif)
-- [Desktop](https://git.generalassemb.ly/SEIR-629/project-1-portfolio/blob/master/readme-assets/desktop.png)
+- [Mobile](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600045219/Screen_Shot_2020-09-13_at_8.59.26_PM_n4n5yn.png)
+- [Tablet](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600045229/Screen_Shot_2020-09-13_at_8.59.36_PM_e4nplg.png)
+- [Desktop](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600045229/Screen_Shot_2020-09-13_at_8.59.36_PM_e4nplg.png)
 
 
 ## Time/Priority Matrix 
 
-- [Matrix] (https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600042851/Front_End_Board_1_cle1h8.jpg)
+- [Time/Priority Matrix](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600042851/Front_End_Board_1_cle1h8.jpg)
 
 ### MVP/PostMVP - 5min
 #### MVP (examples)
