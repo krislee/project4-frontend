@@ -6,10 +6,13 @@
 |---|---| ---|
 |Day 1| Project Description | Complete
 |Day 1| Wireframes / Priority Matrix / Timeline `backend` and `frontend`| Complete
-|Day 2| Working RestAPI | Incomplete
-|Day 3| Core Application Structure (HTML, CSS, etc.) | Incomplete
-|Day 4| MVP & Bug Fixes | Incomplete
-|Day 5| Final Touches and Present | Incomplete
+|Day 3| Create login/signup page | Incomplete
+|Day 3| Create genre dashboard | Incomplete
+|Day 3| Have CRUD for genre dashboard| Incomplete
+|Day 4| Create book dashboard | Incomplete
+|Day 4| Have CRUD for book dashboard | Incomplete
+|Day 5| CSS & Bug Fixes | Incomplete
+|Day 6| Final Touches & CSS | Incomplete
 
 ## Backend
 Click [here](https://github.com/krislee/project4-backend) to view backend repository.

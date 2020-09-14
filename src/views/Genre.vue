@@ -1,15 +1,19 @@
 <template>
   <div class="genre">
-    <h1> Home Page </h1>
+    <h1> Genre Page </h1>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 
 export default {
-  name: 'Home',
+  name: 'Genre',
   components: {
+  },
+  data: function(){
+    return {
+      genres: []
+    }
   }
 }
 </script>

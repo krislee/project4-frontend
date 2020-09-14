@@ -3,10 +3,7 @@
     <b-navbar>
       <template slot="brand">
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
-          <img
-            src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
-            alt="Lightweight UI components for Vue.js based on Bulma"
-          />
+          <h1><strong> B.C. </strong></h1>
         </b-navbar-item>
       </template>
       <template slot="start">
@@ -14,27 +11,19 @@
           <router-link to="/">Home</router-link>
         </b-navbar-item>
         <b-navbar-item href="#">
-          <router-link to="/Page2">About</router-link>
+          <router-link to="/Book">Books</router-link>
         </b-navbar-item>
-        <b-navbar-dropdown label="Info">
-          <b-navbar-item href="#">
-            About
-          </b-navbar-item>
-          <b-navbar-item href="#">
-            Contact
-          </b-navbar-item>
-        </b-navbar-dropdown>
       </template>
 
       <template slot="end">
         <b-navbar-item tag="div">
-          <div class="buttons">
-            <a class="button is-primary">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light">
-              Log in
-            </a>
+          <div>
+            <router-link :to="{name: 'Login', query: {URL: this.URL}}" 
+            v-if="!loggedIn">Login
+            </router-link>
+            <!-- <router-link to="/login" v-bind:URL="URL" v-if="!loggedIn" class="button is-primary">Login</router-link> -->
+            <router-link :to="{name: 'Signup', query: {URL: this.URL}}" v-if="!loggedIn" >Sign up</router-link>
+            <button v-if="loggedIn" v-on:click="logout" class="button is-light">Log Out</button>
           </div>
         </b-navbar-item>
       </template>
@@ -45,6 +34,14 @@
 <script>
 export default {
   name: "Header",
+  props: ['URL', 'loggedIn'],
+  methods: {
+    logout: function(){
+      console.log("peas")
+      this.$emit('logout')
+      console.log('Yellow')
+    }
+  }
 };
 </script>
 
@@ -52,6 +49,9 @@ export default {
 .header {
     width: 90%;
     margin: 10px auto
+}
+a {
+  margin: 5px;
 }
 
 </style>
