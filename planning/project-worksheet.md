@@ -18,15 +18,15 @@ Click [here](https://github.com/krislee/project4-backend) to view backend reposi
 The Book Collection Tracker is a tracker for book lovers and students to keep track of the books they are readind. It will allow them to track the progress of their reading status of each book and what they thought of the book. The frontend application is built using Vue framework and Boostrap CSS library. The tracker allows user to sign up and login to their book collection. The book collection will consist of a genre dashboard, listing all the genres the user has made, and a book dashboard, listing all the books of each genre the user has created. The user also has the option of updating and deleting the genres or books in their respective dashboards. 
 
 ## User Stories 
-User sees a login/sign up page first
-After logging in, user will see the genre cards
-User can add genre cards to the library
-User can also update the genre or delete the genre from the library
-User can click on each genre card to see all the books in the genre
-User can view the books in a flex or grid format
-User can add books with a review of the book
-User can keep track of the reading progree for the book
-User can update or delete the book
+- User sees a login/sign up page first
+- After logging in, user will see the genre cards
+- User can add genre cards to the library
+- User can also update the genre or delete the genre from the library
+- User can click on each genre card to see all the books in the genre
+- User can view the books in a flex or grid format
+- User can add books with a review of the book
+- User can keep track of the reading progree for the book
+- User can update or delete the book
 
 ## Wireframe
 
@@ -40,23 +40,23 @@ User can update or delete the book
 - [Time/Priority Matrix](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600042851/Front_End_Board_1_cle1h8.jpg)
 
 ### MVP/PostMVP - 5min
-#### MVP (examples)
+#### MVP 
 
-- User login/sign up page
-- Genre Dashboard
-- Make modals for create and update genre
-- Develop CRUD functions for genre
-- Book Dashboard
-- Make modal for one book display
-- Make modals for create and update book
-- Develop CRUD functions for book
-- Mobile responsiveness
+- User login/sign up page 
+- Genre Dashboard 
+- Make modals for create and update genre 
+- Develop CRUD functions for genre 
+- Book Dashboard 
+- Make modal for one book display 
+- Make modals for create and update book 
+- Develop CRUD functions for book 
+- Mobile responsiveness 
 - Navigation bar
 
 
 #### PostMVP 
 
-- CSS Animations/improve CSS display
+- CSS Animations/improve CSS display 
 - Add search functionality
 - Refractor code
 - Use GoodReads API
