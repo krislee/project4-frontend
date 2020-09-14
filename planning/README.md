@@ -1,94 +1,116 @@
-# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Unit 4 Project - Build a full CRUD website application using Django Restframework + JWT
+# Project Overview
 
-## Overview
+## Project Schedule
 
-This project will give you a chance to use the skills we've learned in class to create a full CRUD web application using the skills that you have learned in this unite. You'll get a chance to use JavaScript or Vue to tackle interactions on the front-end, as well as a custom API using Django, Django restframework, JWT with postgresql in the backend.
+|  Day | Deliverable | Status
+|---|---| ---|
+|Day 1| Project Description | Complete
+|Day 1| Wireframes / Priority Matrix / Timeline `backend` and `frontend`| Complete
+|Day 2| Working RestAPI | Incomplete
+|Day 3| Core Application Structure (HTML, CSS, etc.) | Incomplete
+|Day 4| MVP & Bug Fixes | Incomplete
+|Day 5| Final Touches and Present | Incomplete
 
-You will be working individually for this project, but we'll be guiding you throughout the process and helping as you go.
+## Backend
+Click [here](https://github.com/krislee/project4-backend) to view backend repository.
 
----
+## Project Description
+The Book Collection Tracker is a tracker for book lovers and students to keep track of the books they are readind. It will allow them to track the progress of their reading status of each book and what they thought of the book. The frontend application is built using Vue framework and Boostrap CSS library. The tracker allows user to sign up and login to their book collection. The book collection will consist of a genre dashboard, listing all the genres the user has made, and a book dashboard, listing all the books of each genre the user has created. The user also has the option of updating and deleting the genres or books in their respective dashboards. 
 
-## Requirements
-It is important to keep in mind the goal of this program and these projects, they are to utilize the skills you have been taught and the skills that employers care about. You should strive to build projects that will catch an employers eye and get you hired.
+## User Stories 
+- User sees a login/sign up page first
+- After logging in, user will see the genre cards
+- User can add genre cards to the library
+- User can also update the genre or delete the genre from the library
+- User can click on each genre card to see all the books in the genre
+- User can view the books in a flex or grid format
+- User can add books with a review of the book
+- User can keep track of the reading progree for the book
+- User can update or delete the book
 
-### Technical Requirements
-Two separate repo's are requied for this project, one for the Back-End and one for the Front-End. They must not reside on the same repo.
+## Wireframe
 
-**Back-End Requirements:**
-
-- Your back-end must be a Django, djangorestframework, djangorestframework-jwt, with postgresql
-- You must have minimum of three or models with two associations.
-- Must have Create, Read, Update, and Destroy functionality built throughout the
-  app (i.e. You don't need full CRUD on every model, just full CRUD throughout
-  your models where it makes sense).
-
-**Front-End Requirements:**
-- Your front-end must use JQuery or Vue and leverage the backend API.
-- You must communicate with the back-end API RESTfully to Create, Read, Update,
-  and Destroy resources.
-- Your frontend must be responsive and work on mobile phones, tablets, and desktops
-- A mobile nav that expands and collapses when a user clicks on the hamburger icon.
-
-Review the [Rubric](https://git.generalassemb.ly/SEIR-629/PROJECT-4/blob/master/evaluation-rubric.md) for the specifics of how your project will
-be graded.
-
-
-### Necessary Deliverables
-Your submission must include **all** of the following:
-
-#### Project Idea and Initial Planning
-By the end of Day 1 you need to submit:
-
-1. Your project idea (a brief 2-3 sentence description of your app)
-2. A list of your models and their properties
-3. Link to the `frontend` repository with project worksheet
-4. Link to the `backend` repository with project worksheet
-
-These and any other planning assets (wireframes, user stories, etc) should go
-inside a `planning/` directory inside your `backend` and `frontend` project repository accordingly.
-
-### Suggested Ways to Start
-
-- **Don’t hesitate to write throwaway code** to solve short-term problems.
-- **Read the docs for whatever technologies, frameworks, or APIs you use**.
-- **Write your code DRY** and **build your APIs RESTful**.
-- **Commit early, commit often**. Don’t be afraid to break something because you can always go back in time to a previous version.
-- **Keep user stories small and well-defined**. Remember – user stories focus on what a user needs, not what development tasks need accomplishing.
-- **Write code another developer wouldn't have to ask you about**. Do your naming conventions make sense? Would another developer be able to look at your app and understand what everything is?
-- **Make it all well-formatted**. Are you indenting, consistently? Can we find the start and end of every div, curly brace, etc.?
-- **Comment your code**. Will someone understand what is going on in each block or function? Even if it's obvious, explaining the what & why means someone else can pick it up and get it.
-- **Write pseudocode before you write actual code**. Thinking through the logic of something helps.
+- [Mobile](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600045219/Screen_Shot_2020-09-13_at_8.59.26_PM_n4n5yn.png)
+- [Tablet](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600045229/Screen_Shot_2020-09-13_at_8.59.36_PM_e4nplg.png)
+- [Desktop](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600045229/Screen_Shot_2020-09-13_at_8.59.36_PM_e4nplg.png)
 
 
-### Final Application
+## Time/Priority Matrix 
 
-Your project is due on the last day of Project Week. Create an issue on this repo containing:
+- [Time/Priority Matrix](https://res.cloudinary.com/dhiwn0i0g/image/upload/v1600042851/Front_End_Board_1_cle1h8.jpg)
 
-- A link to your deployed application
-- A link to your Project 2 Github repositories
+### MVP/PostMVP - 5min
+#### MVP 
 
-The repository for your backend API should include:
+- User login/sign up page 
+- Genre Dashboard 
+- Make modals for create and update genre 
+- Develop CRUD functions for genre 
+- Book Dashboard 
+- Make modal for one book display 
+- Make modals for create and update book 
+- Develop CRUD functions for book 
+- Mobile responsiveness 
+- Navigation bar
 
-- A working JSON API built using Django that meets the technical requirements above.
-- Frequent commits dating back to the very beginning of the project.
-- A `planning/` directory in the root of your `backend` and `frontend` repo that contains a `readme` with all: 
-    - A couple of paragraphs about the **general approach you took**.
-    - Link to your **user stories** – who are your users, what do they want, and why?
-    - Link to your **wireframes** – sketches of  views and interfaces in your application.
-    - Link to your **Time/Priority** matrix 
-    - Table including functionality and estimated/actual time for completion
-    - Descriptions of any **unsolved problems** or **hurdles** you had to overcome.
 
-The repository for the frontend of your application should include:
+#### PostMVP 
 
-- A working frontend application built with HTML, CSS, Bootstrap, JQuery or vue ect.
-- CRUD functionality
-- Frequent commits dating back to the very beginning of the project.
-- Mobile first, responsive web application (Mobile, Tablet and Desktop).
+- CSS Animations/improve CSS display 
+- Add search functionality
+- Refractor code
+- Use GoodReads API
 
-#### Deployment
+## Functional Components
+#### MVP
+| Component | Priority | Estimated Time | Time Invetsted | Actual Time |
+| --- | :---: |  :---: | :---: | :---: |
+| Responsive Navigation Bar | H | 2hr | -hr | -hr|
+| User login/sign up page | H | 4hr | -hr | -hr|
+| Genre Dashboard | H | 3hr | -hr | -hr|
+| Modal for create button for genre | H | 1.5hr| -hr | -hr |
+| Create function for create genre modal| H | 3hr | -hr | -hr|
+| Modal for update button for genre | H | 2hr| -hr | -hr |
+| Update function for update genre modal | H | 3hr | -hr | -hr|
+| Delete function for genre | H | 1.5hr | -hr | -hr|
+| Book dashboard | H | 3hr | -hr | -hr|
+| Modal for one book display | H | 2hr | -hr | -hr|
+| Modal for create button for book  | H | 2hr | -hr | -hr|
+| Create function for create book modal | H | 3hr | -hr | -hr|
+| Modal for update button for book | H | 1hr| 2hr | -hr |
+| Update function for update book modal | H | 4hr | -hr | -hr|
+| Delete function for book | H | 1.5hr | -hr | -hr|
+| Test mobile responsiveness | H | 4hr | -hr | -hr|
+| Total | H | 40.5hrs| -hrs | -hrs |
 
-- Your API Backend must be deployed to Heroku and your front-end must be deployed to
-  Netlify. Applications that are not deployed will be considered incomplete.
- 
----
+#### PostMVP
+| Component | Priority | Estimated Time | Time Invetsted | Actual Time |
+| --- | :---: |  :---: | :---: | :---: |
+| CSS Animation | L | 3hr | -hr | -hr|
+| Search function | M | 3hr | -hr | -hr|
+| Refractor code | M | 3hr | -hr | -hr|
+| Research GoodReads API | H | 6hr | -hr | -hr|
+| Use GoodReads API | H | 6hr | -hr | -hr|
+| Make own icon | L | 2hr | -hr | -hr|
+| Total | H | 23hrs| -hrs | -hrs |
+
+## Additional Libraries
+- Bootstrap
+- Buefy (?) 
+
+## Code Snippet
+
+Use this section to include a brief code snippet of functionality that you are proud of an a brief description  
+
+```
+function reverse(string) {
+	// here is the code to reverse a string of text
+}
+```
+
+## Issues and Resolutions
+ Use this section to list of all major issues encountered and their resolution.
+
+#### SAMPLE.....
+**ERROR**: app.js:34 Uncaught SyntaxError: Unexpected identifier                                
+**RESOLUTION**: Missing comma after first object in sources {} object
