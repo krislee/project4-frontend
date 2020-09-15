@@ -1,64 +1,69 @@
 <template>
   <div class="container">
-    <button class="addBook" @click="createBookModal = !createBookModal">+</button>
-    <b-modal v-if="createBookModal" v-model="isCardModalActive" :width="640" scroll="keep">
-          <div class="card" id="modal"  >
-            <div class="card-content" >
-              <div class="media" >
-                <div class="media-content">
-                  <p class="title is-4">Create Book</p>
-                </div>
-              </div>
-               <div class="field">
-                <b-field label="Title">
-                  <b-input v-model="title"></b-input>
-                </b-field>
-                <b-field label="Author">
-                  <b-input v-model="author"></b-input>
-                </b-field>
-                <b-field label="Status">
-                  <b-radio v-model="read" name="status" native-value="Read">Read</b-radio>
-                  <b-radio v-model="inProgress" name="status" native-value="Read">In Progress</b-radio>
-                  <b-radio v-model="notRead" name="status" native-value="Read">Not Read</b-radio>
-                </b-field>
-                <b-field label="Review">
-                  <b-input v-model="review" type="textarea"></b-input>
-                </b-field>
-                </div>
+    <button class="addBook" @click="createCardModalActive = true">+</button>
+    <!-- CREATE BOOK MODAL -->
+    <b-modal v-model="createCardModalActive" :width="640" scroll="keep">
+      <div class="card" id="modal"  >
+        <div class="card-content" >
+          <div class="media" >
+            <div class="media-content">
+              <p class="title is-4">Create Book</p>
             </div>
           </div>
-      </b-modal>
+          <div class="field">
+            <b-field label="Title">
+              <b-input v-model="title"></b-input>
+            </b-field>
+            <b-field label="Author">
+              <b-input v-model="author"></b-input>
+            </b-field>
+            <b-field label="Status">
+              <b-radio v-model="status" name="status" native-value="Read">Read</b-radio>
+              <b-radio v-model="status" name="status" native-value="In Progress">In Progress</b-radio>
+              <b-radio v-model="status" name="status" native-value="Not Read">Not Read</b-radio>
+            </b-field>
+            <b-field label="Review">
+              <b-input v-model="review" type="textarea"></b-input>
+            </b-field>
+          </div>
+        </div>
+        <button>Submit</button>
+      </div>
+    </b-modal>
+    <!-- END OF CREATE BOOK MODAL -->
     <div class="bookContainer">
-      <div class="books" v-for="book of books" v-bind:key="book.id" v-on:click.prevent="openModal = openModal == book.id? 0: book.id; isCardModalActive = true">
-        <h1 class="bookTitle">{{book.title}}</h1>
-        <h2 class="bookAuthor">{{book.author}}</h2>
-        <!-- MODAL -->
-        <b-modal v-if="openModal == book.id" v-model="isCardModalActive" :width="640" scroll="keep">
-          <div class="card" id="modal"  >
+      <div class="books" v-for="book of books" v-bind:key="book.id" v-bind:id="book.id" @click="getOneBook">
+        <h1 v-bind:id="book.id" class="bookTitle">{{book.title}}</h1>
+        <h2 v-bind:id="book.id" class="bookAuthor">{{book.author}}</h2>
+      </div>
+      <!-- MODAL OUTSIDE OF LOOP -->
+        <b-modal v-model="isCardModalActive" :width="640" scroll="keep">
+          <div class="card" id="modal">
             <div class="card-content" >
               <div class="media" >
                 <div class="media-content">
                   <p class="title is-4">Review</p>
                 </div>
               </div>
-               <div class="field">
-            <b-switch v-model="isSwitchedCustom"
-                true-value="Yes"
-                false-value="No">
-                {{ isSwitchedCustom }}
-            </b-switch>
-        </div>
+               <!-- <div class="field">
+                <b-switch v-model="isSwitchedCustom"
+                    true-value="Yes"
+                    false-value="No">
+                    {{ isSwitchedCustom }}
+                </b-switch>
+              </div> -->
                
               <div class="content">
-                {{book.review}} 
+                {{singleBookReview}}
                 <br>
-                <small>{{book.updated_at}}</small>
+                {{singleBookStatus}}
+                <br>
+                <small></small>
               </div>
             </div>
           </div>
         </b-modal>
         <!-- END OF MODAL -->
-      </div>
       <!-- EMPTY BOOK PAGE -->
       <div v-if="createBookPage">
         Click the + to add books to your collection
@@ -80,25 +85,50 @@ export default {
       books: {},
       loggedIn: false,
       isActive: false,
-      isCardModalActive: true,
+      isCardModalActive: false,
+      createCardModalActive: false,
       openModal: 0,
       createBookPage: false,
       isSwitchedCustom: "Yes",
-      createBookModal: false
+      createBookModal: false,
+      // GRAB CREATE INPUT FIELD VALUES
+      title: "",
+      author: "",
+      status: "Not Read",
+      review: "",
+      // FOR getOneBook METHOD:
+      bookId: 0,
+      singleBookReview: "",
+      singleBookStatus: ""
     }
   },
   created: function(){
     this.listBooks()
   },
   methods: {
-    status: function(){
-      if(this.isSwitchedCustom == "Not Read"){
-        this.isSwitchedCustom == "In Progress"
-      } else if(this.isSwitchedCustom == "In Progress"){
-         this.isSwitchedCustom == "Read"
-      } else {
-        this.isSwitchedCustom == "Not Read"
-      }
+    getOneBook: function(e){
+      const {token, URL, genreId} = this.$route.query
+      this.isCardModalActive = true
+      this.bookId = e.target.id
+      console.log(this.bookId)
+      fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+        method: 'get',
+          headers: {
+            authorization: `JWT ${token}`
+          }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+          this.singleBookReview = data.review
+          if(data.status == 0){
+            this.singleBookStatus = "Read"
+          } else if(data.status == 1){
+            this.singleBookStatus = "In Progress"
+          } else {
+            this.singleBookStatus = "Have Not Read"
+          }
+      })
     },
     listBooks: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
@@ -112,11 +142,7 @@ export default {
       .then(response => response.json())
       .then(data => {
         console.log(data)
-        if(Array.isArray(data)){
-          this.createBookPage = true
-        } else {
           this.books = data.results
-        }
       })
     },
     // createBook: function(){
