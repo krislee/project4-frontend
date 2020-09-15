@@ -13,11 +13,7 @@
     <div class="genre-cards" v-if="URL && tokenFromGenre && loggedIn">
       <!-- LINK TO BOOK WHEN GENRE DIV IS CLICKED -->
         <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard" v-bind:id="genre.id" @click="getBooks">
-          <!-- <router-link :to="{name: 'Book', query: { URL: this.URL, loggedIn:this.loggedIn,}}" tag="div" v-for="genre in genres" v-bind:key="genre.id" class="genreCard"> -->
-            <!-- <router-link :to="{name: 'Book', query: { URL: this.URL, loggedIn:this.loggedIn, token: this.tokenFromGenre}}"> -->
               {{genre.name}} 
-            <!-- </router-link>  -->
-          <!-- </router-link> -->
         </div>
     </div>
   </div>
@@ -36,7 +32,7 @@ export default {
       clickedCreate: false,
       tokenFromGenre: "",
       URL: "",
-      loggedIn: false
+      loggedIn: false,
     }
   },
   created: function(){
@@ -70,12 +66,8 @@ export default {
       // Pass from App the token, URL, and loggedIn
       const {token, URL, loggedIn} = this.$route.query
       this.tokenFromGenre = token.token
-      console.log(this.tokenFromGenre)
       this.URL = URL
-      console.log(this.URL)
-      console.log(URL)
       this.loggedIn = loggedIn
-      console.log(this.loggedIn)
 
       fetch(`${this.URL}/library/genres/`, {
         method: 'get',
@@ -90,8 +82,8 @@ export default {
         console.log(this.genres)
       })
     },
-     getBooks: function(){
-       this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL}})
+     getBooks: function(e){
+       this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL, genreId: e.target.id}})
     }
   } 
 }
