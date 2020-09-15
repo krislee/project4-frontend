@@ -73,8 +73,8 @@ export default {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        firstName: this.firstName,
-                        lastName: this.lastName,
+                        first_name: this.firstName,
+                        last_name: this.lastName,
                         email: this.email,
                         username: this.registerUsername,
                         password: this.registerPassword
@@ -84,8 +84,14 @@ export default {
                 // Send the data with loggedIn event back up to App since data contains the token
                 .then(data => {
                     console.log(data)
-                    this.$emit('registered', data)
+                    if (Array.isArray(data.email) || Array.isArray(data.password) || Array.isArray(data.username)){
+                        alert("Enter valid credentials")
+                    } else {
+                        this.$emit('registered', data)
+                    }
                 })
+            } else{
+                alert("Fields cannot be empty")
             }
         }
     }

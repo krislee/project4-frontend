@@ -43,7 +43,7 @@ export default {
       this.token = e
       console.log(this.token)
       // Send token down to Genre page after logging in (token is stored in data.$route.query) 
-      this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
+      this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL, loggedIn: this.loggedIn}})
     },
     logout: function(){
       console.log('Hello World')
@@ -64,24 +64,5 @@ export default {
 </script>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>

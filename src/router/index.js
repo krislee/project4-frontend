@@ -20,7 +20,7 @@ Vue.use(VueRouter)
     component: Genre
   },
   {
-    path: '/books',
+    path: '/book',
     name: 'Book',
     component: Book
   },

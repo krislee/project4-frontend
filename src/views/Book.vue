@@ -1,18 +1,41 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <Collapse/>
+  <div class="container">
+    BOOKS 
+    <div class="bookContainer">
+      <div class="books">
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Collapse from '../components/Collapse.vue'
+// import Collapse from '../components/Collapse.vue'
 
 export default {
   name: 'Genre',
   components: {
-    Collapse
-  }
+    // Collapse
+  },
+  data: function(){
+    return {
+
+    }
+  },
+  // create: function(){
+  //   this.getBooks()
+  // }
+  // methods: {
+  //   getBooks: function(){
+  //     const
+  //   }
+  // }
 }
 </script>
+
+<style>
+  .bookContainer{
+    display: flex;
+    flex-direction: wrap;
+    width: 80%;
+  }
+</style>
