@@ -12,7 +12,7 @@
 // import Collapse from '../components/Collapse.vue'
 
 export default {
-  name: 'Genre',
+  name: 'Book',
   components: {
     // Collapse
   },

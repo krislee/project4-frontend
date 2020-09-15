@@ -7,6 +7,7 @@
       <Header 
         v-bind:URL="URL" 
         v-bind:loggedIn="loggedIn" 
+        v-bind:token="token"
         @logout="logout"/>
     </div>
     <!-- App is listening for loggedIn event to run login function -->

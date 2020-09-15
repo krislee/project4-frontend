@@ -10,16 +10,13 @@
       <button class="genreCreateSubmit" @click="createGenre">Submit</button>
     </div>
     <!-- DISPLAY GENRE -->
-    <div class="genre-cards">
+    <div class="genre-cards" v-if="URL && tokenFromGenre && loggedIn">
       <!-- LINK TO BOOK WHEN GENRE DIV IS CLICKED -->
-      <router-link :to="{name: 'Book', query: { URL: this.URL, loggedIn:this.loggedIn, token: this.tokenFromGenre}}">
-              Test
-            </router-link>
-        <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard">
+        <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard" v-bind:id="genre.id" @click="getBooks">
           <!-- <router-link :to="{name: 'Book', query: { URL: this.URL, loggedIn:this.loggedIn,}}" tag="div" v-for="genre in genres" v-bind:key="genre.id" class="genreCard"> -->
-            <router-link :to="{name: 'Book', query: { URL: this.URL, loggedIn:this.loggedIn, token: this.tokenFromGenre}}">
-              {{genre.name}}
-            </router-link>
+            <!-- <router-link :to="{name: 'Book', query: { URL: this.URL, loggedIn:this.loggedIn, token: this.tokenFromGenre}}"> -->
+              {{genre.name}} 
+            <!-- </router-link>  -->
           <!-- </router-link> -->
         </div>
     </div>
@@ -37,8 +34,8 @@ export default {
       genres: [],
       genreName: null,
       clickedCreate: false,
-      tokenFromGenre: null,
-      URL: null,
+      tokenFromGenre: "",
+      URL: "",
       loggedIn: false
     }
   },
@@ -79,10 +76,11 @@ export default {
       console.log(URL)
       this.loggedIn = loggedIn
       console.log(this.loggedIn)
-      fetch(`${URL}/library/genres/`, {
+
+      fetch(`${this.URL}/library/genres/`, {
         method: 'get',
         headers: {
-          authorization: `JWT ${token.token}`
+          authorization: `JWT ${this.tokenFromGenre}`
         }
       })
       .then(response => response.json())
@@ -91,6 +89,9 @@ export default {
         this.genres = data.results
         console.log(this.genres)
       })
+    },
+     getBooks: function(){
+       this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL}})
     }
   } 
 }

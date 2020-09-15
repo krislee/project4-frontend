@@ -8,10 +8,13 @@
       </template>
       <template slot="start">
         <b-navbar-item href="#">
-          <router-link to="/">Home</router-link>
+          <router-link to="/" v-if="!loggedIn">Home</router-link>
+        </b-navbar-item>
+         <b-navbar-item href="#">
+          <router-link :to="{name: 'Genre', query: {URL: this.URL, token: this.token, loggedIn: this.loggedIn}}" v-if="loggedIn">Genres</router-link>
         </b-navbar-item>
         <b-navbar-item href="#">
-          <router-link to="/Book">Books</router-link>
+          <router-link to="/Book" v-if="loggedIn">Books</router-link>
         </b-navbar-item>
       </template>
 
@@ -34,7 +37,7 @@
 <script>
 export default {
   name: "Header",
-  props: ['URL', 'loggedIn'],
+  props: ['URL', 'loggedIn', 'token'],
   methods: {
     logout: function(){
       console.log("peas")
