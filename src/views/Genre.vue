@@ -11,14 +11,55 @@
     </div>
     <!-- DISPLAY GENRE -->
     <div class="genre-cards" v-if="URL && tokenFromGenre && loggedIn">
-      <!-- LINK TO BOOK WHEN GENRE DIV IS CLICKED -->
-        <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard" v-bind:id="genre.id" @click="getBooks">
-              {{genre.name}} 
+      <!-- LINK TO BOOKS WHEN GENRE DIV IS CLICKED -->
+      <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard">
+        <div v-bind:id="genre.id" @click="getBooks" class="book-link">
+          {{genre.name}} 
         </div>
+        <!-- DROPDOWN -->
+        <div class="button-container">
+          <i class="fas fa-pencil-alt" v-bind:id="genre.id" @click="editGenreFields"></i>
+          <i class="fas fa-trash-alt" v-bind:id="genre.id" @click="deleteGenre"></i>
+        </div>
+        <!-- EDIT MODAL -->
+        <b-modal v-model="updateModal" :width="640" scroll="keep">
+          <div class="card" id="modal">
+            <div class="card-content" >
+              <div class="media" >
+                <div class="media-content">
+                  <p class="title is-4">Edit Genre</p>
+                </div>
+              </div>
+              <div class="field" id="field">
+                <b-field label="Title" class="longer-width">
+                  <b-input v-model="editGenreName"></b-input>
+                </b-field>
+                <b-button @click="updateGenre">Edit</b-button>
+              </div>
+            </div>
+          </div>
+        </b-modal>
+        <!-- END OF EDIT MODAL -->
+      </div>
     </div>
   </div>
+  <!-- @click="openingDropdown = openingDropdown == 0? genre.id: 0;" -->
+   <!-- <div class="dropdown is-active" v-if="openingDropdown == genre.id" v-bind:id="genre.id">
+            <div class="dropdown-trigger">
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" v-bind:id="genre.id" ref="editButton">
+                <span v-bind:id="genre.id" ><i v-bind:id="genre.id" class="fas fa-edit"></i></span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a href="#" class="dropdown-item" v-bind:id="genre.id" @click="editGenreFields">Edit</a>
+                <a class="dropdown-item" v-bind:id="genre.id" @click="deleteGenre">Delete</a>
+              </div>
+            </div>
+          </div> -->
 </template>
 
+ 
 <script>
 
 export default {
@@ -33,14 +74,33 @@ export default {
       tokenFromGenre: "",
       URL: "",
       loggedIn: false,
+      editGenreName: "",
+      genreId: 0,
+      updateModal: false,
+      genreUpdateId: 0,
+      dropdown: 'dropdown',
+      isActive: null,
+      openingDropdown: 0
     }
   },
   created: function(){
     this.getGenre()
   },
   methods: {
+    // openDropdown: function(e){
+    //   console.log(e.target)
+    //   console.log(e.target.id)
+    //   console.log(this.$refs.editButton)
+    //   if(this.$refs.editButton){
+    //     this.isActive = 'is-active'
+    //   }
+    //   // this.isActive = 'is-active'
+    //   if()
+    // },
+  
     createGenre: function(){
-      const {token, URL} = this.$route.query
+      const {token, URL, loggedIn} = this.$route.query
+      this.loggedIn = loggedIn
       fetch(`${URL}/library/genres/`, {
           method: 'post',
           headers: {
@@ -82,8 +142,54 @@ export default {
         console.log(this.genres)
       })
     },
-     getBooks: function(e){
+    getBooks: function(e){
        this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL, genreId: e.target.id}})
+    },
+    editGenreFields: function(event){
+      this.updateModal = true
+      console.log(event)
+      console.log(event.target)
+      this.genreUpdateId = event.target.id
+      console.log(this.genreUpdateId)
+      const oneGenre = this.genres.find(genre => {
+        return genre.id == this.genreUpdateId
+      })
+      console.log(oneGenre)
+      this.editGenreName = oneGenre.name
+    },
+    updateGenre: function(){
+      const {token, URL, loggedIn} = this.$route.query
+      this.loggedIn = loggedIn
+      fetch(`${URL}/library/genres/${this.genreUpdateId}/`, {
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `JWT ${token.token}`
+          },
+          body: JSON.stringify({
+              name: this.editGenreName
+          })
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.getGenre()
+        this.updateModal = false
+      })
+    },
+    deleteGenre: function(e){
+      const {token, URL, loggedIn} = this.$route.query
+      this.loggedIn = loggedIn
+      this.genreId = e.target.id
+      fetch(`${URL}/library/genres/${this.genreId}`, {
+          method: 'delete',
+          headers: {
+            authorization: `JWT ${token.token}`
+          }
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.getGenre()
+      })
     }
   } 
 }
@@ -120,10 +226,23 @@ export default {
   margin-right: 15px;
   margin-bottom: 30px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
 }
+
+.book-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  height: 100%;
+  background-color: yellow
+}
+
+
 
 .buttonGenreCreate {
   margin: 0 auto;
@@ -136,6 +255,23 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px;
+  width: 80%;
+  font-size: 20px;
+}
+
+.button-container > i:hover {
+  color: rgb(152, 152, 1);
+  cursor: pointer;
+}
+
+.button-container > .dropdown > .dropdown-trigger > .dropdown-menu {
+  top: 95%;
 }
 
 

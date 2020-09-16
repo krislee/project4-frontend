@@ -55,14 +55,14 @@
                 <br>
                 <small></small>
                 <!-- DROP DOWN -->
-                <div class="button-container">
+                <div class="button-book-container">
                   <b-dropdown aria-role="list">
                     <button class="button is-primary" slot="trigger" slot-scope="{ active }">
                         <span><i class="far fa-edit"></i></span>
                         <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
-                    <b-dropdown-item aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem">Delete</b-dropdown-item>
+                    <b-dropdown-item is-up aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
+                    <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
                   </b-dropdown>
                 </div>
                 <!-- END OF DROP DOWN -->
@@ -124,20 +124,21 @@ export default {
     return {
       books: {},
       loggedIn: false,
-      isActive: false,
+      // isActive: false,
+      // openModal: 0,
+      // FOR NO BOOKS
+      createBookPage: false,
+      // FOR MODALS
       isCardModalActive: false,
       createCardModalActive: false,
-      openModal: 0,
-      createBookPage: false,
-      isSwitchedCustom: "Yes",
       createBookModal: false,
-      // GRAB CREATE INPUT FIELD VALUES
+      // CREATING BOOK FIELDS
       title: "",
       author: "",
       status: "Not Read",
       review: "",
       imageURL: "",
-      // FOR getOneBook METHOD:
+      // FOR RETRIEVING ONE BOOK
       bookId: 0,
       singleBookReview: "",
       singleBookStatus: "",
@@ -159,7 +160,6 @@ export default {
       this.loggedIn = loggedIn
       this.isCardModalActive = true
       this.bookId = e.target.id
-      console.log(this.bookId)
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
         method: 'get',
           headers: {
@@ -192,7 +192,9 @@ export default {
       .then(data => {
         if(Array.isArray(data)){
           this.createBookPage = true
+          this.books = {}
         } else {
+          console.log(data)
           this.books = data.results
         }
       })
@@ -238,7 +240,6 @@ export default {
       const allBooks = this.books.find(book => {
         return book.id == this.bookId
       })
-      console.log(allBooks)
       this.editTitle = allBooks.title
       this.editAuthor = allBooks.author
       this.editStatus = allBooks.status
@@ -251,7 +252,6 @@ export default {
       }
       this.editReview = allBooks.review
       this.editImageURL = allBooks.photo
-      console.log(this.editImageURL)
     },
     // UPDATE BOOK AFTER POPULATING BOOK FIELD
     updateBook: function(){
@@ -283,6 +283,23 @@ export default {
       .then(() => {
         this.listBooks()
         // this.getOneBook()
+        this.editCardModalActive = false
+        this.isCardModalActive = false
+      })
+    },
+    // DELETE BOOK
+    deleteBook: function(){
+      const {loggedIn, token, URL, genreId} = this.$route.query
+      this.loggedIn = loggedIn
+      fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+        method: 'delete',
+        headers: {
+          authorization: `JWT ${token}`
+        }
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.listBooks()
         this.editCardModalActive = false
         this.isCardModalActive = false
       })
@@ -383,8 +400,9 @@ export default {
     text-align: center;
   }
   
-  .dropdown > .dropdown-menu {
-    top: 64%;
+  .button-book-container > .dropdown > .dropdown-menu {
+    top: -17%;
+    left: 100%;
   }
 
   @media only screen and (min-width: 600px) {
