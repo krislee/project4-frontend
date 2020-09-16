@@ -3,31 +3,34 @@
     <button class="addBook" @click="createCardModalActive = true">+</button>
     <!-- CREATE BOOK MODAL -->
     <b-modal v-model="createCardModalActive" :width="640" scroll="keep">
-      <div class="card" id="modal"  >
+      <div class="card" id="modal">
         <div class="card-content" >
           <div class="media" >
             <div class="media-content">
               <p class="title is-4">Create Book</p>
             </div>
           </div>
-          <div class="field">
-            <b-field label="Title">
+          <div class="field" id="field">
+            <b-field label="Title" class="longer-width">
               <b-input v-model="title"></b-input>
             </b-field>
-            <b-field label="Author">
+            <b-field label="Author" class="longer-width">
               <b-input v-model="author"></b-input>
             </b-field>
-            <b-field label="Status">
+            <b-field label="Status" class="longer-width" id="status-container">
               <b-radio v-model="status" name="status" native-value="Read">Read</b-radio>
               <b-radio v-model="status" name="status" native-value="In Progress">In Progress</b-radio>
               <b-radio v-model="status" name="status" native-value="Not Read">Not Read</b-radio>
             </b-field>
-            <b-field label="Review">
+            <b-field label="ImageURL" class="longer-width">
+              <b-input v-model="imageURL" type="text"></b-input>
+            </b-field>
+            <b-field label="Review" class="longer-width">
               <b-input v-model="review" type="textarea"></b-input>
             </b-field>
+            <b-button @click="createBook">Submit</b-button>
           </div>
         </div>
-        <button>Submit</button>
       </div>
     </b-modal>
     <!-- END OF CREATE BOOK MODAL -->
@@ -45,20 +48,57 @@
                   <p class="title is-4">Review</p>
                 </div>
               </div>
-               <!-- <div class="field">
-                <b-switch v-model="isSwitchedCustom"
-                    true-value="Yes"
-                    false-value="No">
-                    {{ isSwitchedCustom }}
-                </b-switch>
-              </div> -->
-               
               <div class="content">
                 {{singleBookReview}}
                 <br>
                 {{singleBookStatus}}
                 <br>
                 <small></small>
+                <!-- DROP DOWN -->
+                <div class="button-container">
+                  <b-dropdown aria-role="list">
+                    <button class="button is-primary" slot="trigger" slot-scope="{ active }">
+                        <span><i class="far fa-edit"></i></span>
+                        <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                    </button>
+                    <b-dropdown-item aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem">Delete</b-dropdown-item>
+                  </b-dropdown>
+                </div>
+                <!-- END OF DROP DOWN -->
+                <!-- EDIT MODAL -->
+                <b-modal v-model="editCardModalActive" :width="640" scroll="keep">
+                  <div class="card" id="modal">
+                    <div class="card-content" >
+                      <div class="media" >
+                        <div class="media-content">
+                          <p class="title is-4">Edit Book</p>
+                        </div>
+                      </div>
+                      <div class="field" id="field">
+                        <b-field label="Title" class="longer-width">
+                          <b-input v-model="editTitle"></b-input>
+                        </b-field>
+                        <b-field label="Author" class="longer-width">
+                          <b-input v-model="editAuthor"></b-input>
+                        </b-field>
+                        <b-field label="Status" class="longer-width" id="status-container">
+                          <b-radio v-model="editStatus" name="status" native-value="Read">Read</b-radio>
+                          <b-radio v-model="editStatus" name="status" native-value="In Progress">In Progress</b-radio>
+                          <b-radio v-model="editStatus" name="status" native-value="Not Read">Not Read</b-radio>
+                        </b-field>
+                        <b-field label="ImageURL" class="longer-width">
+                          <b-input v-model="editImageURL" type="text"></b-input>
+                        </b-field>
+                        <b-field label="Review" class="longer-width">
+                          <b-input v-model="editReview" type="textarea"></b-input>
+                        </b-field>
+                        <b-button @click="updateBook">Edit</b-button>
+                      </div>
+                    </div>
+                  </div>
+                </b-modal>
+                <!-- END OF EDIT MODAL -->
               </div>
             </div>
           </div>
@@ -96,10 +136,18 @@ export default {
       author: "",
       status: "Not Read",
       review: "",
+      imageURL: "",
       // FOR getOneBook METHOD:
       bookId: 0,
       singleBookReview: "",
-      singleBookStatus: ""
+      singleBookStatus: "",
+      // FOR EDIT BOOK:
+      editCardModalActive: false,
+      editTitle: "",
+      editAuthor: "",
+      editStatus: 0,
+      editReview: "",
+      editImageURL: ""
     }
   },
   created: function(){
@@ -107,7 +155,8 @@ export default {
   },
   methods: {
     getOneBook: function(e){
-      const {token, URL, genreId} = this.$route.query
+      const {loggedIn, token, URL, genreId} = this.$route.query
+      this.loggedIn = loggedIn
       this.isCardModalActive = true
       this.bookId = e.target.id
       console.log(this.bookId)
@@ -141,38 +190,114 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        if(Array.isArray(data)){
+          this.createBookPage = true
+        } else {
           this.books = data.results
+        }
       })
     },
-    // createBook: function(){
-    //   const {loggedIn, token, URL, genreId} = this.$route.query
-    //   this.loggedIn = loggedIn
-    //   fetch(`${URL}/library/genres/${genreId}/books`, {
-    //     method: 'post',
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       authorization: `JWT ${token}`
-    //     },
-    //     body: JSON.stringify({
-
-    //     })
-    //   })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data)
-    //     if(Array.isArray(data)){
-    //       alert("Title has already been created")
-    //     } else{
-    //       this.listBooks()
-    //     }
-    //   })
-    // }
+    createBook: function(){
+      const {loggedIn, token, URL, genreId} = this.$route.query
+      this.loggedIn = loggedIn
+      if(this.status === "Read"){
+        this.stat = 0
+      } else if(this.status === "In Progress"){
+        this.stat = 1
+      } else {
+        this.stat = 2
+      }
+      fetch(`${URL}/library/genres/${genreId}/books`, {
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `JWT ${token}`
+        },
+        body: JSON.stringify({
+          title: this.title,
+          author: this.author,
+          status: this.stat,
+          photo: this.imageURL,
+          review: this.review,
+          genre: Number(genreId)
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        this.createCardModalActive = false
+        this.createBookPage = false
+        this.listBooks()
+      })
+    },
+    // POPULATE EDIT BOOK FIELD
+    editBookFields: function(){
+      const {loggedIn} = this.$route.query
+      this.loggedIn = loggedIn
+      this.editCardModalActive = true
+      const allBooks = this.books.find(book => {
+        return book.id == this.bookId
+      })
+      console.log(allBooks)
+      this.editTitle = allBooks.title
+      this.editAuthor = allBooks.author
+      this.editStatus = allBooks.status
+      if (this.editStatus == 0){
+        this.editStatus = "Read"
+      } else if(this.editStatus == 1){
+        this.editStatus = "In Progress"
+      } else {
+        this.editStatus = "Not Read"
+      }
+      this.editReview = allBooks.review
+      this.editImageURL = allBooks.photo
+      console.log(this.editImageURL)
+    },
+    // UPDATE BOOK AFTER POPULATING BOOK FIELD
+    updateBook: function(){
+      const {loggedIn, token, URL, genreId} = this.$route.query
+      this.loggedIn = loggedIn
+      if(this.editStatus === "Read"){
+        this.editStat = 0
+      } else if(this.editStatus  === "In Progress"){
+        this.editStat = 1
+      } else {
+        this.editStat = 2
+      }
+      fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+        method: 'put',
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `JWT ${token}`
+        },
+        body: JSON.stringify({
+          title: this.editTitle,
+          author: this.editAuthor,
+          status: this.editStat,
+          photo: this.editImageURL,
+          review: this.editReview,
+          genre: Number(genreId)
+        })
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.listBooks()
+        // this.getOneBook()
+        this.editCardModalActive = false
+        this.isCardModalActive = false
+      })
+    }
   }
 }
 </script>
 
 <style>
+
+  .content {
+    height: 400px;
+    overflow: auto;
+  }
+
   .bookContainer{
     display: flex;
     flex-wrap: wrap;
@@ -202,8 +327,93 @@ export default {
   }
 
   .addBook{
-    font-size: 3rem;
+    font-size: 40px;
     border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 20px;
   }
+
+  #field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .field > .longer-width {
+    width: 80%;
+  }
+
+  div.field-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .b-radio.radio {
+    display: flex;
+  }
+
+  div.field-body > .has-addons {
+    margin: initial;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+   div.field-body > .has-addons > .radio {
+     width: 200px;
+     margin: 10px 0px;
+   }
+
+  .control-label {
+    width: 200px;
+  }
+
+  .b-radio.radio .control-label {
+    padding-left: 15px !important;
+    padding-right: 5px !important;
+  }
+
+  .is-4 {
+    text-align: center;
+  }
+  
+  .dropdown > .dropdown-menu {
+    top: 64%;
+  }
+
+  @media only screen and (min-width: 600px) {
+
+    div.field-body > .has-addons {
+      flex-direction: row;
+      width: 500px;
+      justify-content: flex-start;
+    }
+
+    div.field-body > .has-addons > .radio {
+     width: 130px;
+     margin: 0px;
+   }
+
+   div.field-body > .has-addons > .radio:nth-child(2) {
+     margin-right: 40px;
+   }
+
+    .control-label {
+      margin-left: 20px;
+    }
+
+    .b-radio.radio .control-label {
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+    }
+
+  }
+
 
 </style>

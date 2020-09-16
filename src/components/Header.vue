@@ -40,9 +40,7 @@ export default {
   props: ['URL', 'loggedIn', 'token'],
   methods: {
     logout: function(){
-      console.log("peas")
       this.$emit('logout')
-      console.log('Yellow')
     }
   }
 };

@@ -47,7 +47,7 @@ export default {
       this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL, loggedIn: this.loggedIn}})
     },
     logout: function(){
-      console.log('Hello World')
+      console.log('Bye')
       this.loggedIn = false
       this.token = null
       this.$router.push('/')

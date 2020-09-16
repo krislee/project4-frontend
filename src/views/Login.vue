@@ -51,6 +51,8 @@ export default {
                     if(data.non_field_errors){
                         alert("Invalid credentials")
                     } else{
+                        console.log(data.token)
+                        console.log(data.username)
                         this.$emit('loggedIn', data)
                     }
                 })
