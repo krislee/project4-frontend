@@ -16,10 +16,27 @@
         <div v-bind:id="genre.id" @click="getBooks" class="book-link">
           {{genre.name}} 
         </div>
-        <!-- DROPDOWN -->
-        <div class="button-container">
+        <!-- EDIT/DELETE BUTTONS -->
+        <!-- <div class="button-container">
           <i class="fas fa-pencil-alt" v-bind:id="genre.id" @click="editGenreFields"></i>
           <i class="fas fa-trash-alt" v-bind:id="genre.id" @click="deleteGenre"></i>
+        </div> -->
+          <!-- @click="openingDropdown = openingDropdown == 0? genre.id: 0;" -->
+        <!-- DROP DOWN -->
+        <div class="dropdown container" @click="openingDropdown = openingDropdown == genre.id ? 0 : genre.id">
+          <div class="dropdown" v-bind:class="{'is-active': openingDropdown == genre.id }" v-bind:id="genre.id">
+            <div class="dropdown-trigger">
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" v-bind:id="genre.id" ref="editButton">
+                <span v-bind:id="genre.id" ><i v-bind:id="genre.id" class="fas fa-edit"></i></span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a href="#" class="dropdown-item" v-bind:id="genre.id" @click="editGenreFields">Edit</a>
+                <a class="dropdown-item" v-bind:id="genre.id" @click="deleteGenre">Delete</a>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- EDIT MODAL -->
         <b-modal v-model="updateModal" :width="640" scroll="keep">
@@ -78,7 +95,7 @@ export default {
       genreId: 0,
       updateModal: false,
       genreUpdateId: 0,
-      dropdown: 'dropdown',
+      // dropdown: 'dropdown',
       isActive: null,
       openingDropdown: 0
     }
