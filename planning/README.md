@@ -6,15 +6,15 @@
 |---|---| ---|
 |Day 1| Project Description | Complete
 |Day 1| Wireframes / Priority Matrix / Timeline `backend` and `frontend`| Complete
-|Day 3| Create login/signup page | Incomplete
-|Day 3| Can create new genres on genre dashboard| Incomplete
-|Day 3| Can list all genres on genre dashboard| Incomplete
-|Day 3| Can update genres on genre dashboard| Incomplete
-|Day 3| Can delete genres on genre dashboard| Incomplete
-|Day 4| Can create new books on book dashboard| Incomplete
-|Day 4| Can list all books on book dashboard| Incomplete
-|Day 4| Can update books on book dashboard| Incomplete
-|Day 4| Can delete books on book dashboard| Incomplete
+|Day 3| Create login/signup page | Complete
+|Day 3| Can create new genres on genre dashboard| Complete
+|Day 3| Can list all genres on genre dashboard| Complete
+|Day 3| Can update genres on genre dashboard| Complete
+|Day 3| Can delete genres on genre dashboard| Complete
+|Day 4| Can create new books on book dashboard| Complete
+|Day 4| Can list all books on book dashboard| Ccomplete
+|Day 4| Can update books on book dashboard| Complete
+|Day 4| Can delete books on book dashboard| Complete
 |Day 5| CSS & Bug Fixes | Incomplete
 |Day 6| Final Touches & CSS | Incomplete
 
