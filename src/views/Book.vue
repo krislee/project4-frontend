@@ -53,7 +53,7 @@
             <div class="card-content" >
               <div class="media" >
                 <div class="media-content">
-                  <p class="title is-4">Review</p>
+                  <p class="title is-4 review-title">Review</p>
                 </div>
               </div>
               <div v-if="displayBookReviewAlert">
@@ -449,7 +449,7 @@ export default {
 
   .button-book-container > .dropdown > .dropdown-trigger > .is-primary {
     color: #000000 !important;
-    background: green !important;
+    background: white !important;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
   }
@@ -458,6 +458,11 @@ export default {
     max-width: 500px !important;
     height: 350px;
     background: white;
+    border-radius: 20px;
+  }
+
+  .card-content {
+    background: white !important;
   }
 
   .bookTitle {
@@ -487,6 +492,10 @@ export default {
     justify-content: center;
     cursor: pointer;
     margin-left: 20px;
+  }
+
+  .fa-edit {
+    font-size: 25px;
   }
 
   #field {
@@ -542,14 +551,19 @@ export default {
   }
   
   .button-book-container > .dropdown > .dropdown-menu {
-    border: 1px solid black;
     top: 0%;
-    left: -370%;
+    left: -400%;
+    margin-bottom: 30px;
   }
 
   .warning {
     color: red;
     margin-bottom: 10px;
+  }
+
+  a.dropdown-item:hover, .dropdown .dropdown-menu .has-link a:hover, button.dropdown-item:hover {
+    background-color: transparent !important;
+    color: black !important;
   }
 
   @media only screen and (min-width: 600px) {
