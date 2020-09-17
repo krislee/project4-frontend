@@ -12,11 +12,11 @@
           </div>
           <div class="field" id="field">
             <b-field label="Title" class="longer-width">
-              <b-input v-model="title" maxlength="255"></b-input>
+              <b-input v-model="title" maxlength="30"></b-input>
             </b-field>
             
             <b-field label="Author" class="longer-width">
-              <b-input v-model="author" maxlength="255"></b-input>
+              <b-input v-model="author" maxlength="40"></b-input>
             </b-field>
             <b-field label="Status" class="longer-width" id="status-container">
               <b-radio v-model="status" name="status" native-value="Read">Read</b-radio>
@@ -37,9 +37,9 @@
     <!-- END OF CREATE BOOK MODAL -->
     <div class="bookContainer">
       <div class="books" v-for="book of books" v-bind:key="book.id" v-bind:id="book.id">
-        <div v-bind:id="book.id" @click="getOneBook">
-          <h1 v-bind:id="book.id" class="bookTitle">{{book.title}}</h1>
-          <h2 v-bind:id="book.id" class="bookAuthor">{{book.author}}</h2>
+        <div v-bind:style='{ backgroundSize: "cover", backgroundImage: `url("${book.photo}")` }' v-bind:id="book.id" @click="getOneBook">
+          <h1 v-bind:id="book.id" v-if='book.photo == ""' class="bookTitle">{{book.title}}</h1>
+          <h2 v-bind:id="book.id" v-if='book.photo == ""' class="bookAuthor">{{book.author}}</h2>
         </div>
         <div>
           <div class="bookStatusIcon" v-if="bookIconRead = book.status == 0 ? true: false"><i class="fas fa-check-circle"></i></div>
@@ -87,10 +87,10 @@
                       </div>
                       <div class="field" id="field">
                         <b-field label="Title" class="longer-width">
-                          <b-input v-model="editTitle" maxlength="255"></b-input>
+                          <b-input v-model="editTitle" maxlength="30"></b-input>
                         </b-field>
                         <b-field label="Author" class="longer-width">
-                          <b-input v-model="editAuthor" maxlength="255"></b-input>
+                          <b-input v-model="editAuthor" maxlength="40"></b-input>
                         </b-field>
                         <b-field label="Status" class="longer-width" id="status-container">
                           <b-radio v-model="editStatus" name="status" native-value="Read">Read</b-radio>
@@ -133,8 +133,6 @@ export default {
     return {
       books: {},
       loggedIn: false,
-      // isActive: false,
-      // openModal: 0,
       // FOR NO BOOKS
       createBookPage: false,
       // FOR MODALS
@@ -190,13 +188,6 @@ export default {
           } else {
             this.displayBookReviewAlert = false
           }
-          // if(data.status == 0){
-          //   this.singleBookStatus = "Read"
-          // } else if(data.status == 1){
-          //   this.singleBookStatus = "In Progress"
-          // } else {
-          //   this.singleBookStatus = "Have Not Read"
-          // }
       })
     },
     listBooks: function(){
@@ -274,6 +265,10 @@ export default {
           this.createBookPage = false
           this.listBooks()
           this.emptyfields = false
+          this.title = ""
+          this.author = ""
+          this.imageURL = ""
+          this.review = ""
         })
       }
     },
@@ -336,6 +331,10 @@ export default {
         }
         this.editCardModalActive = false
         this.isCardModalActive = false
+        this.editTitle = ""
+        this.editAuthor = ""
+        this.editImageURL = ""
+        this.editReview = ""
       })
     },
     // DELETE BOOK
@@ -376,7 +375,6 @@ export default {
   }
   .books {
     width: 100%;
-    background-color:yellowgreen;
     height: 300px;
     width: 200px;
     margin: 60px;
@@ -388,6 +386,23 @@ export default {
 
   .books > div:nth-child(1) {
     height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    background: #d2d2d2; 
+    border-radius: 15px;
+    margin-bottom: 10px;
+  }
+
+  .books > div:nth-child(1) > h1 {
+    font-size: 20px;
+  }
+
+  .books > div:nth-child(1) > h2 {
+    font-size: 15px;
   }
 
   .books > div:nth-child(2) {
