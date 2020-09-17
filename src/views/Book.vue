@@ -51,7 +51,59 @@
         <b-modal v-model="isCardModalActive" scroll="keep">
           <div class="card review-card">
             <div class="card-content" >
-              <div class="media" >
+              <!-- TABS -->
+              <b-tabs type="is-boxed" expanded>
+                <b-tab-item label="Information">
+                  <div class="singleTitle" v-if="!editBookInfo"><b class="modalInfo"> Title: </b>{{singleBookTitle}}</div><br>
+                  <b-input v-model="editTitle" v-if="editBookInfo" maxlength="30" placeholder="Title"></b-input>
+                  <div class="singleAuthor" v-if="!editBookInfo"><b class="modalInfo">Author: </b>{{singleBookAuthor}}</div><br>
+                  <b-input v-model="editAuthor" v-if="editBookInfo" maxlength="40" placeholder="Author"></b-input>
+                  <div class="singleStatus" v-if="!editBookInfo"><b class="modalInfo">Status: </b>{{singleBookStatus}}</div><br>
+                  <b-field class="longer-width" v-if="editBookInfo" id="status-container">
+                    <b-radio v-model="editStatus" name="status" native-value="Read">Read</b-radio>
+                    <b-radio v-model="editStatus" name="status" native-value="In Progress">In Progress</b-radio>
+                    <b-radio v-model="editStatus" name="status" native-value="Not Read">Not Read</b-radio>
+                  </b-field>
+                  <b-input v-model="editImageURL" v-if="editBookInfo" placeholder="Book Cover URL"></b-input>
+                  <b-button @click="updateBook" v-if="editBookInfo">Submit</b-button>
+                  <b-button @click="editBookInfo = !editBookInfo" v-if="editBookInfo">Back</b-button>
+                  <!-- DROP DOWN -->
+                  <div class="button-book-container">
+                      <b-dropdown aria-role="list">
+                        <button class="button is-primary" slot="trigger" slot-scope="{ active }" v-if="!editBookInfo">
+                            <span><i class="far fa-edit"></i></span>
+                            <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                        </button>
+                        <b-dropdown-item is-up aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
+                        <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
+                      </b-dropdown>
+                  </div>
+                  <!-- END OF DROP DOWN -->
+                </b-tab-item>
+                <b-tab-item label="Review">
+                  <div v-if="displayBookReviewAlert">Click the edit icon to add or edit a review.</div>
+                  <div class="content" id="content-review">
+                    <div class=singleReview v-if="!editBookReview">{{singleBookReview}}</div>
+                    <b-input v-model="editReview" v-if="editBookReview" type="textarea"></b-input>
+                    <b-button @click="updateBookReview" v-if="editBookReview">Submit</b-button>
+                    <b-button @click="editBookReview = !editBookReview" v-if="editBookReview">Back</b-button>
+                  </div>
+                  <!-- DROP DOWN -->
+                  <div class="button-book-container">
+                      <b-dropdown aria-role="list">
+                        <button class="button is-primary" slot="trigger" slot-scope="{ active }">
+                            <span><i class="far fa-edit"></i></span>
+                            <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                        </button>
+                        <b-dropdown-item is-up aria-role="listitem" @click="editBookReviewField">Edit</b-dropdown-item>
+                        <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
+                      </b-dropdown>
+                  </div>
+                  <!-- END OF DROP DOWN -->
+                </b-tab-item>
+              </b-tabs>
+
+              <!-- <div class="media" >
                 <div class="media-content review-title">
                   <p class="title is-4">Review</p>
                 </div>
@@ -63,9 +115,9 @@
                 <div>
                   {{singleBookReview}}
                 </div>
-              </div>
+              </div> -->
               <!-- DROP DOWN -->
-              <div class="button-book-container">
+              <!-- <div class="button-book-container">
                   <b-dropdown aria-role="list">
                     <button class="button is-primary" slot="trigger" slot-scope="{ active }">
                         <span><i class="far fa-edit"></i></span>
@@ -74,7 +126,7 @@
                     <b-dropdown-item is-up aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
                     <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
                   </b-dropdown>
-                </div>
+              </div> -->
                 <!-- END OF DROP DOWN -->
                 <!-- EDIT MODAL -->
                 <b-modal v-model="editCardModalActive" :width="640" scroll="keep">
@@ -151,6 +203,8 @@ export default {
       bookId: 0,
       singleBookReview: "",
       singleBookStatus: "",
+      singleBookTitle: "",
+      singleBookAuthor: "",
       bookIconRead: false,
       bookIconInProgress: false,
       bookIconNotRead: false,
@@ -162,6 +216,8 @@ export default {
       editReview: "",
       editImageURL: "",
       displayBookReviewAlert: false,
+      editBookInfo: false,
+      editBookReview: false
     }
   },
   created: function(){
@@ -182,12 +238,24 @@ export default {
       .then(response => response.json())
       .then(data => {
         console.log(data)
-          this.singleBookReview = data.review
-          if(this.singleBookReview == ""){
-            this.displayBookReviewAlert = true
-          } else {
-            this.displayBookReviewAlert = false
-          }
+        this.singleBookTitle = data.title
+        this.singleBookAuthor = data.author
+        this.singleBookReview = data.review
+        this.singleBookStatus = data.status
+
+        if(this.singleBookReview == ""){
+          this.displayBookReviewAlert = true
+        } else {
+          this.displayBookReviewAlert = false
+        }
+
+         if(data.status == 0){
+            this.singleBookStatus = "Read"
+        } else if(data.status == 1){
+          this.singleBookStatus = "In Progress"
+        } else {
+          this.singleBookStatus = "Have Not Read"
+        }
       })
     },
     listBooks: function(){
@@ -274,9 +342,12 @@ export default {
     },
     // POPULATE EDIT BOOK FIELD
     editBookFields: function(){
+      this.editBookInfo = !this.editBookInfo
       const {loggedIn} = this.$route.query
       this.loggedIn = loggedIn
-      this.editCardModalActive = true
+      // this.editCardModalActive = true
+      console.log(this.bookId)
+      console.log("hi")
       const allBooks = this.books.find(book => {
         return book.id == this.bookId
       })
@@ -290,8 +361,20 @@ export default {
       } else {
         this.editStatus = "Not Read"
       }
-      this.editReview = allBooks.review
+      // this.editReview = allBooks.review
       this.editImageURL = allBooks.photo
+    },
+    editBookReviewField: function(){
+      this.editBookReview = !this.editBookReview
+      const {loggedIn} = this.$route.query
+      this.loggedIn = loggedIn
+      // this.editCardModalActive = true
+      console.log(this.bookId)
+      console.log("hi")
+      const allBooks = this.books.find(book => {
+        return book.id == this.bookId
+      })
+      this.editReview = allBooks.review
     },
     // UPDATE BOOK AFTER POPULATING BOOK FIELD
     updateBook: function(){
@@ -305,7 +388,7 @@ export default {
         this.editStat = 2
       }
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'put',
+        method: 'patch',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
@@ -315,6 +398,36 @@ export default {
           author: this.editAuthor,
           status: this.editStat,
           photo: this.editImageURL,
+          genre: Number(genreId)
+        })
+      })
+      .then(response => response.json())
+      .then((data) => {
+        this.listBooks()
+        // this.getOneBook()
+        this.singleBookReview = data.review
+        if(this.singleBookReview == ""){
+            this.displayBookReviewAlert = true
+        } else {
+          this.displayBookReviewAlert = false
+        }
+        this.editTitle = ""
+        this.editAuthor = ""
+        this.editImageURL = ""
+        this.editBookInfo = false
+        this.isCardModalActive = false
+      })
+    },
+    updateBookReview: function(){
+      const {loggedIn, token, URL, genreId} = this.$route.query
+      this.loggedIn = loggedIn
+      fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+        method: 'patch',
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `JWT ${token}`
+        },
+        body: JSON.stringify({
           review: this.editReview,
           genre: Number(genreId)
         })
@@ -329,12 +442,9 @@ export default {
         } else {
           this.displayBookReviewAlert = false
         }
-        this.editCardModalActive = false
-        this.isCardModalActive = false
-        this.editTitle = ""
-        this.editAuthor = ""
-        this.editImageURL = ""
         this.editReview = ""
+        this.editBookReview = false
+        this.isCardModalActive = false
       })
     },
     // DELETE BOOK
