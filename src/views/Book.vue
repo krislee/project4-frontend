@@ -102,65 +102,6 @@
                   <!-- END OF DROP DOWN -->
                 </b-tab-item>
               </b-tabs>
-
-              <!-- <div class="media" >
-                <div class="media-content review-title">
-                  <p class="title is-4">Review</p>
-                </div>
-              </div>
-              <div v-if="displayBookReviewAlert">
-                Click the edit icon to add or edit a review.
-              </div>
-              <div class="content" id="content-review">
-                <div>
-                  {{singleBookReview}}
-                </div>
-              </div> -->
-              <!-- DROP DOWN -->
-              <!-- <div class="button-book-container">
-                  <b-dropdown aria-role="list">
-                    <button class="button is-primary" slot="trigger" slot-scope="{ active }">
-                        <span><i class="far fa-edit"></i></span>
-                        <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                    </button>
-                    <b-dropdown-item is-up aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
-                    <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
-                  </b-dropdown>
-              </div> -->
-                <!-- END OF DROP DOWN -->
-                <!-- EDIT MODAL -->
-                <b-modal v-model="editCardModalActive" :width="640" scroll="keep">
-                  <div class="card" id="modal">
-                    <div class="card-content" >
-                      <div class="media" >
-                        <div class="media-content">
-                          <p class="title is-4">Edit Book</p>
-                        </div>
-                      </div>
-                      <div class="field" id="field">
-                        <b-field label="Title" class="longer-width">
-                          <b-input v-model="editTitle" maxlength="30"></b-input>
-                        </b-field>
-                        <b-field label="Author" class="longer-width">
-                          <b-input v-model="editAuthor" maxlength="40"></b-input>
-                        </b-field>
-                        <b-field label="Status" class="longer-width" id="status-container">
-                          <b-radio v-model="editStatus" name="status" native-value="Read">Read</b-radio>
-                          <b-radio v-model="editStatus" name="status" native-value="In Progress">In Progress</b-radio>
-                          <b-radio v-model="editStatus" name="status" native-value="Not Read">Not Read</b-radio>
-                        </b-field>
-                        <b-field label="ImageURL" class="longer-width">
-                          <b-input v-model="editImageURL" type="text"></b-input>
-                        </b-field>
-                        <b-field label="Review" class="longer-width">
-                          <b-input v-model="editReview" type="textarea"></b-input>
-                        </b-field>
-                        <b-button @click="updateBook">Edit</b-button>
-                      </div>
-                    </div>
-                  </div>
-                </b-modal>
-                <!-- END OF EDIT MODAL -->
             </div>
           </div>
         </b-modal>
