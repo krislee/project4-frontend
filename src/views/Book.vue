@@ -52,14 +52,14 @@
           <div class="card review-card">
             <div class="card-content" >
               <div class="media" >
-                <div class="media-content">
-                  <p class="title is-4 review-title">Review</p>
+                <div class="media-content review-title">
+                  <p class="title is-4">Review</p>
                 </div>
               </div>
               <div v-if="displayBookReviewAlert">
                 Click the edit icon to add or edit a review.
               </div>
-              <div class="content">
+              <div class="content" id="content-review">
                 <div>
                   {{singleBookReview}}
                 </div>
@@ -406,7 +406,7 @@ export default {
 <style>
 
   .content {
-    height: 200px;
+    height: 190px;
     overflow: auto;
     margin-bottom: 20px;
   }
@@ -463,6 +463,15 @@ export default {
 
   .card-content {
     background: white !important;
+    padding: 1.75rem;
+  }
+
+  .review-title {
+    border-bottom: 1px solid #d2d2d2;
+  }
+
+  .review-title > p {
+    margin-bottom: 10px;
   }
 
   .bookTitle {
