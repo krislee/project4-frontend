@@ -5,8 +5,15 @@
     <div class="inputCreate" v-if="clickedCreate">
       <b-field label="Create Genre">
         <!-- Grab genre name through v-model="genreName" for this.createGenre()-->
-        <b-input v-model="genreName" placeholder="Name" rounded></b-input>
+        <b-input v-model="genreName" placeholder="Name" rounded maxlength="255"></b-input>
       </b-field>
+       <!-- NEW ALERT DIVS -->
+        <div class="warning genre-warning" v-if="noGenreName">
+           Please provide a genre.
+        </div>
+        <div class="warning genre-warning" v-if="genreExists">
+          This genre already exists.
+        </div>
       <button class="genreCreateSubmit" @click="createGenre">Submit</button>
     </div>
     <!-- DISPLAY GENRE -->
@@ -16,12 +23,6 @@
         <div v-bind:id="genre.id" @click="getBooks" class="book-link">
           {{genre.name}} 
         </div>
-        <!-- EDIT/DELETE BUTTONS -->
-        <!-- <div class="button-container">
-          <i class="fas fa-pencil-alt" v-bind:id="genre.id" @click="editGenreFields"></i>
-          <i class="fas fa-trash-alt" v-bind:id="genre.id" @click="deleteGenre"></i>
-        </div> -->
-          <!-- @click="openingDropdown = openingDropdown == 0? genre.id: 0;" -->
         <!-- DROP DOWN -->
         <div class="dropdown container" @click="openingDropdown = openingDropdown == genre.id ? 0 : genre.id">
           <div class="dropdown" v-bind:class="{'is-active': openingDropdown == genre.id }" v-bind:id="genre.id">
@@ -49,7 +50,7 @@
               </div>
               <div class="field" id="field">
                 <b-field label="Title" class="longer-width">
-                  <b-input v-model="editGenreName"></b-input>
+                  <b-input v-model="editGenreName" maxlength="255"></b-input>
                 </b-field>
                 <b-button @click="updateGenre">Edit</b-button>
               </div>
@@ -60,20 +61,6 @@
       </div>
     </div>
   </div>
-  <!-- @click="openingDropdown = openingDropdown == 0? genre.id: 0;" -->
-   <!-- <div class="dropdown is-active" v-if="openingDropdown == genre.id" v-bind:id="genre.id">
-            <div class="dropdown-trigger">
-              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" v-bind:id="genre.id" ref="editButton">
-                <span v-bind:id="genre.id" ><i v-bind:id="genre.id" class="fas fa-edit"></i></span>
-              </button>
-            </div>
-            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <a href="#" class="dropdown-item" v-bind:id="genre.id" @click="editGenreFields">Edit</a>
-                <a class="dropdown-item" v-bind:id="genre.id" @click="deleteGenre">Delete</a>
-              </div>
-            </div>
-          </div> -->
 </template>
 
  
@@ -86,7 +73,7 @@ export default {
   data: function(){
     return {
       genres: [],
-      genreName: null,
+      genreName: "",
       clickedCreate: false,
       tokenFromGenre: "",
       URL: "",
@@ -95,49 +82,48 @@ export default {
       genreId: 0,
       updateModal: false,
       genreUpdateId: 0,
-      // dropdown: 'dropdown',
       isActive: null,
-      openingDropdown: 0
+      openingDropdown: 0,
+      // Warnings:
+      noGenreName: false,
+      genreExists: false
     }
   },
   created: function(){
     this.getGenre()
   },
   methods: {
-    // openDropdown: function(e){
-    //   console.log(e.target)
-    //   console.log(e.target.id)
-    //   console.log(this.$refs.editButton)
-    //   if(this.$refs.editButton){
-    //     this.isActive = 'is-active'
-    //   }
-    //   // this.isActive = 'is-active'
-    //   if()
-    // },
-  
     createGenre: function(){
       const {token, URL, loggedIn} = this.$route.query
       this.loggedIn = loggedIn
-      fetch(`${URL}/library/genres/`, {
-          method: 'post',
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `JWT ${token.token}`
-          },
-          body: JSON.stringify({
-              name: this.genreName
+      console.log(this.genreName)
+      if (this.genreName === "") {
+        this.noGenreName = true
+        this.genreExists = false
+      } else {
+          fetch(`${URL}/library/genres/`, {
+            method: 'post',
+            headers: {
+              "Content-Type": "application/json",
+              authorization: `JWT ${token.token}`
+            },
+            body: JSON.stringify({
+                name: this.genreName
+            })
           })
-      })
-      .then(response => response.json())
-      .then((data) => {
-        if(Array.isArray(data)){
-          alert("This genre already exists.")
-          this.genreName = null
-        } else{
-           this.getGenre()
-           this.genreName = null
+          .then(response => response.json())
+          .then((data) => {
+            if(Array.isArray(data)){
+              this.noGenreName = false
+              this.genreExists = true
+              this.genreName = ""
+            } else{
+              this.getGenre()
+              this.genreName = ""
+              this.noGenreName = false
+            }
+          })
         }
-      })
     },
     getGenre: function(){
       // Pass from App the token, URL, and loggedIn
@@ -291,5 +277,12 @@ export default {
   top: 95%;
 }
 
+.warning {
+    color: red;
+}
+
+.genre-warning {
+  margin-bottom: 10px;
+}
 
 </style>

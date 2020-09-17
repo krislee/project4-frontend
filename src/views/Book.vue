@@ -12,10 +12,10 @@
           </div>
           <div class="field" id="field">
             <b-field label="Title" class="longer-width">
-              <b-input v-model="title"></b-input>
+              <b-input v-model="title" maxlength="255"></b-input>
             </b-field>
             <b-field label="Author" class="longer-width">
-              <b-input v-model="author"></b-input>
+              <b-input v-model="author" maxlength="255"></b-input>
             </b-field>
             <b-field label="Status" class="longer-width" id="status-container">
               <b-radio v-model="status" name="status" native-value="Read">Read</b-radio>
@@ -28,6 +28,9 @@
             <b-field label="Review" class="longer-width">
               <b-input v-model="review" type="textarea"></b-input>
             </b-field>
+            <div v-if="emptyfields" class="warning">
+              The author and the title field must be filled out.
+            </div>
             <b-button @click="createBook">Submit</b-button>
           </div>
         </div>
@@ -77,10 +80,10 @@
                       </div>
                       <div class="field" id="field">
                         <b-field label="Title" class="longer-width">
-                          <b-input v-model="editTitle"></b-input>
+                          <b-input v-model="editTitle" maxlength="255"></b-input>
                         </b-field>
                         <b-field label="Author" class="longer-width">
-                          <b-input v-model="editAuthor"></b-input>
+                          <b-input v-model="editAuthor" maxlength="255"></b-input>
                         </b-field>
                         <b-field label="Status" class="longer-width" id="status-container">
                           <b-radio v-model="editStatus" name="status" native-value="Read">Read</b-radio>
@@ -93,6 +96,9 @@
                         <b-field label="Review" class="longer-width">
                           <b-input v-model="editReview" type="textarea"></b-input>
                         </b-field>
+                        <div v-if="editemptyfields" class="warning">
+                          The author and the title field must be filled out.
+                        </div>
                         <b-button @click="updateBook">Edit</b-button>
                       </div>
                     </div>
@@ -148,7 +154,9 @@ export default {
       editAuthor: "",
       editStatus: 0,
       editReview: "",
-      editImageURL: ""
+      editImageURL: "",
+      emptyfields: false,
+      editemptyfields: false
     }
   },
   created: function(){
@@ -202,35 +210,40 @@ export default {
     createBook: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
-      if(this.status === "Read"){
-        this.stat = 0
-      } else if(this.status === "In Progress"){
-        this.stat = 1
+      if (this.title === "" || this.author === "") {
+        this.emptyfields = true
       } else {
-        this.stat = 2
-      }
-      fetch(`${URL}/library/genres/${genreId}/books`, {
-        method: 'post',
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `JWT ${token}`
-        },
-        body: JSON.stringify({
-          title: this.title,
-          author: this.author,
-          status: this.stat,
-          photo: this.imageURL,
-          review: this.review,
-          genre: Number(genreId)
+        if(this.status === "Read"){
+          this.stat = 0
+        } else if(this.status === "In Progress"){
+          this.stat = 1
+        } else {
+          this.stat = 2
+        }
+        fetch(`${URL}/library/genres/${genreId}/books`, {
+          method: 'post',
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `JWT ${token}`
+          },
+          body: JSON.stringify({
+            title: this.title,
+            author: this.author,
+            status: this.stat,
+            photo: this.imageURL,
+            review: this.review,
+            genre: Number(genreId)
+          })
         })
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        this.createCardModalActive = false
-        this.createBookPage = false
-        this.listBooks()
-      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          this.createCardModalActive = false
+          this.createBookPage = false
+          this.listBooks()
+          this.emptyfields = false
+        })
+      }
     },
     // POPULATE EDIT BOOK FIELD
     editBookFields: function(){
@@ -257,35 +270,40 @@ export default {
     updateBook: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
-      if(this.editStatus === "Read"){
-        this.editStat = 0
-      } else if(this.editStatus  === "In Progress"){
-        this.editStat = 1
+      if (this.editTitle === "" || this.editAuthor === "") {
+        this.editemptyfields = true
       } else {
-        this.editStat = 2
-      }
-      fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'put',
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `JWT ${token}`
-        },
-        body: JSON.stringify({
-          title: this.editTitle,
-          author: this.editAuthor,
-          status: this.editStat,
-          photo: this.editImageURL,
-          review: this.editReview,
-          genre: Number(genreId)
+        if(this.editStatus === "Read"){
+          this.editStat = 0
+        } else if(this.editStatus  === "In Progress"){
+          this.editStat = 1
+        } else {
+          this.editStat = 2
+        }
+        fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+          method: 'put',
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `JWT ${token}`
+          },
+          body: JSON.stringify({
+            title: this.editTitle,
+            author: this.editAuthor,
+            status: this.editStat,
+            photo: this.editImageURL,
+            review: this.editReview,
+            genre: Number(genreId)
+          })
         })
-      })
-      .then(response => response.json())
-      .then(() => {
-        this.listBooks()
-        // this.getOneBook()
-        this.editCardModalActive = false
-        this.isCardModalActive = false
-      })
+        .then(response => response.json())
+        .then(() => {
+          this.listBooks()
+          // this.getOneBook()
+          this.editCardModalActive = false
+          this.isCardModalActive = false
+          this.editemptyfields = false
+        })
+      }
     },
     // DELETE BOOK
     deleteBook: function(){
@@ -403,6 +421,11 @@ export default {
   .button-book-container > .dropdown > .dropdown-menu {
     top: -17%;
     left: 100%;
+  }
+
+  .warning {
+    color: red;
+    margin-bottom: 10px;
   }
 
   @media only screen and (min-width: 600px) {

@@ -15,6 +15,13 @@
                 </span>
             </p>
         </div>
+        <!-- NEW ALERT DIVS -->
+        <div class="warning" v-if="failedAuth">
+            The credentials you have provided are invalid. Please try again.
+        </div>
+        <div class="warning" v-if="emptyField">
+            You cannot provide empty fields.
+        </div>
         <!-- LOGIN BUTTON -->
         <button class="button is-primary" @click="handleLogin">Login</button>
     </div>
@@ -27,13 +34,18 @@ export default {
     props: [],
     data: function(){
         return {
-            loginUsername: null,
-            loginPassword: null
+            loginUsername: "",
+            loginPassword: "",
+            failedAuth: false,
+            emptyField: false
         }
     }, 
     methods: {
         handleLogin: function(){
-            if (this.loginUsername && this.loginPassword){
+            if (this.loginUsername === "" || this.loginPassword === "") {
+                this.emptyField = true
+                this.failedAuth = false
+            } else if (this.loginUsername && this.loginPassword) {
                 fetch(`${this.$route.query.URL}/auth/users/login/`, {
                     method: "post",
                     headers: {
@@ -49,15 +61,16 @@ export default {
                 .then(data => {
                     console.log(data)
                     if(data.non_field_errors){
-                        alert("Invalid credentials")
+                        this.failedAuth = true
+                        this.emptyField = false
                     } else{
                         console.log(data.token)
                         console.log(data.username)
                         this.$emit('loggedIn', data)
+                        this.failedAuth = false
+                        this.emptyField = false
                     }
                 })
-            } else {
-                alert("Username or password is required")
             }
         }
     }
@@ -77,6 +90,10 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.warning {
+    color: red;
 }
 
 </style>
