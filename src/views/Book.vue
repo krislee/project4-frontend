@@ -14,6 +14,7 @@
             <b-field label="Title" class="longer-width">
               <b-input v-model="title" maxlength="255"></b-input>
             </b-field>
+            
             <b-field label="Author" class="longer-width">
               <b-input v-model="author" maxlength="255"></b-input>
             </b-field>
@@ -22,15 +23,12 @@
               <b-radio v-model="status" name="status" native-value="In Progress">In Progress</b-radio>
               <b-radio v-model="status" name="status" native-value="Not Read">Not Read</b-radio>
             </b-field>
-            <b-field label="ImageURL" class="longer-width">
+            <b-field label="Book Cover" message="Add a book cover image URL to personalize your book display" class="longer-width">
               <b-input v-model="imageURL" type="text"></b-input>
             </b-field>
-            <b-field label="Review" class="longer-width">
+            <b-field label="Review" message="Add a review for the book" class="longer-width">
               <b-input v-model="review" type="textarea"></b-input>
             </b-field>
-            <div v-if="emptyfields" class="warning">
-              The author and the title field must be filled out.
-            </div>
             <b-button @click="createBook">Submit</b-button>
           </div>
         </div>
@@ -96,9 +94,6 @@
                         <b-field label="Review" class="longer-width">
                           <b-input v-model="editReview" type="textarea"></b-input>
                         </b-field>
-                        <div v-if="editemptyfields" class="warning">
-                          The author and the title field must be filled out.
-                        </div>
                         <b-button @click="updateBook">Edit</b-button>
                       </div>
                     </div>
@@ -148,15 +143,15 @@ export default {
       bookId: 0,
       singleBookReview: "",
       singleBookStatus: "",
-      // FOR EDIT BOOK:
+      // EDIT BOOK:
       editCardModalActive: false,
       editTitle: "",
       editAuthor: "",
       editStatus: 0,
       editReview: "",
       editImageURL: "",
-      emptyfields: false,
-      editemptyfields: false
+      emptyTitleField: false,
+      emptyAuthorField: false
     }
   },
   created: function(){
@@ -210,8 +205,24 @@ export default {
     createBook: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
-      if (this.title === "" || this.author === "") {
-        this.emptyfields = true
+      if (this.title === "" && this.author === "") {
+        this.$buefy.toast.open({
+          duration: 2000,
+          message: `<b>Title and Author fields cannot be blank</b>`,
+          type: 'is-danger'
+        })
+      } else if (this.author === "") {
+        this.$buefy.toast.open({
+          duration: 2000,
+          message: `<b>Author field cannot be blank</b>`,
+          type: 'is-danger'
+        })
+      } else if (this.title === "") {
+        this.$buefy.toast.open({
+          duration: 2000,
+          message: `<b>Title field cannot be blank</b>`,
+          type: 'is-danger'
+        })
       } else {
         if(this.status === "Read"){
           this.stat = 0
@@ -270,40 +281,35 @@ export default {
     updateBook: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
-      if (this.editTitle === "" || this.editAuthor === "") {
-        this.editemptyfields = true
+      if(this.editStatus === "Read"){
+        this.editStat = 0
+      } else if(this.editStatus  === "In Progress"){
+        this.editStat = 1
       } else {
-        if(this.editStatus === "Read"){
-          this.editStat = 0
-        } else if(this.editStatus  === "In Progress"){
-          this.editStat = 1
-        } else {
-          this.editStat = 2
-        }
-        fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-          method: 'put',
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `JWT ${token}`
-          },
-          body: JSON.stringify({
-            title: this.editTitle,
-            author: this.editAuthor,
-            status: this.editStat,
-            photo: this.editImageURL,
-            review: this.editReview,
-            genre: Number(genreId)
-          })
-        })
-        .then(response => response.json())
-        .then(() => {
-          this.listBooks()
-          // this.getOneBook()
-          this.editCardModalActive = false
-          this.isCardModalActive = false
-          this.editemptyfields = false
-        })
+        this.editStat = 2
       }
+      fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+        method: 'put',
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `JWT ${token}`
+        },
+        body: JSON.stringify({
+          title: this.editTitle,
+          author: this.editAuthor,
+          status: this.editStat,
+          photo: this.editImageURL,
+          review: this.editReview,
+          genre: Number(genreId)
+        })
+      })
+      .then(response => response.json())
+      .then(() => {
+        this.listBooks()
+        // this.getOneBook()
+        this.editCardModalActive = false
+        this.isCardModalActive = false
+      })
     },
     // DELETE BOOK
     deleteBook: function(){
