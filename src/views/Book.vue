@@ -26,9 +26,9 @@
             <b-field label="Book Cover" message="Add a book cover image URL to personalize your book display" class="longer-width">
               <b-input v-model="imageURL" type="text"></b-input>
             </b-field>
-            <b-field label="Review" message="Add a review for the book" class="longer-width">
+            <!-- <b-field label="Review" message="Add a review for the book" class="longer-width">
               <b-input v-model="review" type="textarea"></b-input>
-            </b-field>
+            </b-field> -->
             <b-button @click="createBook">Submit</b-button>
           </div>
         </div>
@@ -39,6 +39,9 @@
       <div class="books" v-for="book of books" v-bind:key="book.id" v-bind:id="book.id" @click="getOneBook">
         <h1 v-bind:id="book.id" class="bookTitle">{{book.title}}</h1>
         <h2 v-bind:id="book.id" class="bookAuthor">{{book.author}}</h2>
+        <!-- <div class="bookStatusIcon" v-if="bookIconRead"><i class="fas fa-check-circle"></i></div>
+        <div class="bookStatusIcon" v-if="bookIconInProgress"><i class="fas fa-book-open"></i></div>
+        <div class="bookStatusIcon" v-if="bookIconNotRead"><i class="fas fa-book"></i></div> -->
       </div>
       <!-- MODAL OUTSIDE OF LOOP -->
         <b-modal v-model="isCardModalActive" :width="640" scroll="keep">
@@ -48,6 +51,9 @@
                 <div class="media-content">
                   <p class="title is-4">Review</p>
                 </div>
+              </div>
+              <div v-if="displayBookReviewAlert">
+                Click the edit icon to add or edit a review.
               </div>
               <div class="content">
                 {{singleBookReview}}
@@ -139,10 +145,15 @@ export default {
       status: "Not Read",
       review: "",
       imageURL: "",
+      emptyTitleField: false,
+      emptyAuthorField: false,
       // FOR RETRIEVING ONE BOOK
       bookId: 0,
       singleBookReview: "",
       singleBookStatus: "",
+      bookIconRead: false,
+      bookIconInProgress: false,
+      bookIconNotRead: false,
       // EDIT BOOK:
       editCardModalActive: false,
       editTitle: "",
@@ -150,8 +161,7 @@ export default {
       editStatus: 0,
       editReview: "",
       editImageURL: "",
-      emptyTitleField: false,
-      emptyAuthorField: false
+      displayBookReviewAlert: false
     }
   },
   created: function(){
@@ -173,13 +183,18 @@ export default {
       .then(data => {
         console.log(data)
           this.singleBookReview = data.review
-          if(data.status == 0){
-            this.singleBookStatus = "Read"
-          } else if(data.status == 1){
-            this.singleBookStatus = "In Progress"
+          if(this.singleBookReview == ""){
+            this.displayBookReviewAlert = true
           } else {
-            this.singleBookStatus = "Have Not Read"
+            this.displayBookReviewAlert = false
           }
+          // if(data.status == 0){
+          //   this.singleBookStatus = "Read"
+          // } else if(data.status == 1){
+          //   this.singleBookStatus = "In Progress"
+          // } else {
+          //   this.singleBookStatus = "Have Not Read"
+          // }
       })
     },
     listBooks: function(){
@@ -199,6 +214,10 @@ export default {
         } else {
           console.log(data)
           this.books = data.results
+          this.singleBookReview = data.review
+          if(this.singleBookReview == ""){
+            this.displayBookReviewAlert = true
+          }
         }
       })
     },
@@ -304,9 +323,15 @@ export default {
         })
       })
       .then(response => response.json())
-      .then(() => {
+      .then((data) => {
         this.listBooks()
         // this.getOneBook()
+        this.singleBookReview = data.review
+        if(this.singleBookReview == ""){
+            this.displayBookReviewAlert = true
+        } else {
+          this.displayBookReviewAlert = false
+        }
         this.editCardModalActive = false
         this.isCardModalActive = false
       })
