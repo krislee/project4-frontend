@@ -377,7 +377,7 @@ export default {
     width: 100%;
     height: 300px;
     width: 200px;
-    margin: 60px;
+    margin: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
