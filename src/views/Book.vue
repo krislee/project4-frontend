@@ -338,7 +338,7 @@ export default {
         this.editStat = 2
       }
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'patch',
+        method: 'put',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
@@ -378,7 +378,7 @@ export default {
       const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'patch',
+        method: 'put',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
