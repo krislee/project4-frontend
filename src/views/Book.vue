@@ -1,24 +1,25 @@
 <template>
   <div class="container">
-    <button class="addBook" @click="createCardModalActive = true">+</button>
+    <div class="create-button-container">
+      <button class="addBook" @click="createCardModalActive = true">+</button>
+    </div>
     <!-- CREATE BOOK MODAL -->
-    <b-modal v-model="createCardModalActive" :width="640" scroll="keep">
-      <div class="card" id="modal">
-        <div class="card-content" >
+    <b-modal v-model="createCardModalActive" :width="640" scroll="keep" id="create-modal">
+      <div class="card">
+        <div class="card-content" id="create-modal" >
           <div class="media" >
             <div class="media-content">
               <p class="title is-4">Create Book</p>
             </div>
           </div>
-          <div class="field" id="field">
+          <div class="field" id="field-create">
             <b-field label="Title" class="longer-width">
               <b-input v-model="title" maxlength="30"></b-input>
             </b-field>
-            
             <b-field label="Author" class="longer-width">
               <b-input v-model="author" maxlength="40"></b-input>
             </b-field>
-            <b-field label="Status" class="longer-width" id="status-container">
+            <b-field label="Status" class="longer-width" id="status-container-create">
               <b-radio v-model="status" name="status" native-value="Read">Read</b-radio>
               <b-radio v-model="status" name="status" native-value="In Progress">In Progress</b-radio>
               <b-radio v-model="status" name="status" native-value="Not Read">Not Read</b-radio>
@@ -65,8 +66,10 @@
                     <b-radio v-model="editStatus" name="status" native-value="Not Read">Not Read</b-radio>
                   </b-field>
                   <b-input v-model="editImageURL" v-if="editBookInfo" placeholder="Book Cover URL"></b-input>
-                  <b-button @click="updateBook" v-if="editBookInfo">Submit</b-button>
-                  <b-button @click="editBookInfo = !editBookInfo" v-if="editBookInfo">Back</b-button>
+                  <div class="submit-button-container">
+                    <b-button class="submit-book-info" @click="updateBook" v-if="editBookInfo">Submit</b-button>
+                    <b-button class="submit-book-info" @click="editBookInfo = !editBookInfo" v-if="editBookInfo">Back</b-button>
+                  </div>
                   <!-- DROP DOWN -->
                   <div class="button-book-container">
                       <b-dropdown aria-role="list">
@@ -85,13 +88,15 @@
                   <div class="content" id="content-review">
                     <div class=singleReview v-if="!editBookReview">{{singleBookReview}}</div>
                     <b-input v-model="editReview" v-if="editBookReview" type="textarea"></b-input>
-                    <b-button @click="updateBookReview" v-if="editBookReview">Submit</b-button>
-                    <b-button @click="editBookReview = !editBookReview" v-if="editBookReview">Back</b-button>
+                    <div class="review-edit-button">
+                      <b-button @click="updateBookReview" v-if="editBookReview">Submit</b-button>
+                      <b-button @click="editBookReview = !editBookReview" v-if="editBookReview">Back</b-button>
+                    </div>
                   </div>
                   <!-- DROP DOWN -->
                   <div class="button-book-container">
                       <b-dropdown aria-role="list">
-                        <button class="button is-primary" slot="trigger" slot-scope="{ active }">
+                        <button v-if="!editBookReview" class="button is-primary" slot="trigger" slot-scope="{ active }">
                             <span><i class="far fa-edit"></i></span>
                             <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                         </button>
@@ -469,6 +474,14 @@ export default {
     display: none;
   }
 
+  #create-modal > .modal-content {
+    height: 500px;
+  }
+
+  #status-container-create {
+    margin-bottom: 1rem;
+  }
+
   .button-book-container > .dropdown > .dropdown-trigger > .is-primary {
     color: #000000 !important;
     background: white !important;
@@ -504,25 +517,51 @@ export default {
   .bookAuthor{
     font-size: 1.5em;
   }
-  #modal{
-    /* testing purposes gave background color */
-    background-color:orange;
-  }
+
+
+  
 
   .review-card {
     height: 100%;
     width: 100%;
   }
 
+  #status-container {
+    width: 100%;
+    margin-top: -10px;
+    margin-bottom: 30px;
+  }
+
+  .singleStatus {
+    margin-bottom: 70px;
+  }
+
+  .b-tabs .tab-content {
+    padding-bottom: 0px !important; 
+  }
+  
+  .create-button-container {
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+    margin-bottom: 20px;
+  }
+
   .addBook{
     font-size: 40px;
-    border-radius: 50%;
+    border-radius: 50px;
+    border: none;
     height: 60px;
     width: 60px;
     display: flex;
     justify-content: center;
     cursor: pointer;
-    margin-left: 20px;
+    margin-right: 150px;
+    background: #d2d2d2;
+  }
+
+  .addBook:hover {
+    background: #767676;
   }
 
   .fa-edit {
@@ -535,6 +574,26 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  #field-create {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #field-create > .field {
+    margin: 0px;
+  }
+
+  #field-create > #status-container-create {
+    margin-bottom: 10px;
+  }
+
+  #field-create > button {
+    margin-top: 10px;
   }
 
   .field > .longer-width {
@@ -572,6 +631,10 @@ export default {
     width: 200px;
   }
 
+  span .control-label {
+    width: 300px;
+  }
+
   .b-radio.radio .control-label {
     padding-left: 15px !important;
     padding-right: 5px !important;
@@ -597,17 +660,37 @@ export default {
     color: black !important;
   }
 
+  .submit-book-info {
+    margin-right: 10px;
+    margin-top: 20px;
+  }
+
+  .submit-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .review-edit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .review-edit-button > button {
+    margin-right: 10px;
+  }
+
   @media only screen and (min-width: 600px) {
 
     div.field-body > .has-addons {
-      flex-direction: row;
-      width: 500px;
       justify-content: flex-start;
     }
 
     div.field-body > .has-addons > .radio {
-     width: 130px;
-     margin: 0px;
+     width: 180px;
+     margin-bottom: 10px;
    }
 
    div.field-body > .has-addons > .radio:nth-child(2) {
@@ -619,7 +702,6 @@ export default {
     }
 
     .b-radio.radio .control-label {
-      padding-left: 0px !important;
       padding-right: 0px !important;
     }
 

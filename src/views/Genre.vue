@@ -27,7 +27,7 @@
         <div class="dropdown container" @click="openingDropdown = openingDropdown == genre.id ? 0 : genre.id">
           <div class="dropdown" v-bind:class="{'is-active': openingDropdown == genre.id }" v-bind:id="genre.id">
             <div class="dropdown-trigger">
-              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" v-bind:id="genre.id" ref="editButton">
+              <button class="button edit-genre-button"  aria-haspopup="true" aria-controls="dropdown-menu" v-bind:id="genre.id" ref="editButton">
                 <span v-bind:id="genre.id" ><i v-bind:id="genre.id" class="fas fa-edit"></i></span>
               </button>
             </div>
@@ -40,8 +40,8 @@
           </div>
         </div>
         <!-- EDIT MODAL -->
-        <b-modal v-model="updateModal" :width="640" scroll="keep">
-          <div class="card" id="modal">
+        <b-modal v-model="updateModal" :width="640" scroll="keep" id="edit-title-modal">
+          <div class="card" id="modal-edit-title">
             <div class="card-content" >
               <div class="media" >
                 <div class="media-content">
@@ -210,10 +210,11 @@ export default {
 
 .genre-cards {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  width: 80%;
+  width: 100%;
   margin-top: 50px;
 }
 
@@ -224,27 +225,35 @@ export default {
 
 .genreCard {
   height: 20rem;
-  background-color: yellow;
-  width: 30%;
-  margin-right: 15px;
-  margin-bottom: 30px;
+  background-color: #98cbd4;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  width: 60%;
+  border-radius: 30px;
+}
+
+.genreCard:nth-child(even) {
+  background-color: #67929b;
 }
 
 .book-link {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 200px;
   cursor: pointer;
   height: 100%;
-  background-color: yellow
+  font-size: 90%;
 }
 
+.dropdown-trigger > .edit-genre-button {
+  background: transparent;
+  border: none;
+}
 
 
 .buttonGenreCreate {
@@ -283,6 +292,36 @@ export default {
 
 .genre-warning {
   margin-bottom: 10px;
+}
+
+#modal-edit-title {
+  height: 100%;
+}
+
+#edit-title-modal > .animation-content {
+  height: 300px;
+  width: 400px;
+}
+
+@media only screen and (min-width: 620px) {
+
+  .genre-cards {
+    flex-direction: row;
+  }
+
+  .genreCard {
+    width: 40%;
+    margin: 30px;
+  }
+
+}
+
+@media only screen and (min-width: 1080px) {
+
+  .genreCard {
+    width: 300px;
+  }
+
 }
 
 </style>
