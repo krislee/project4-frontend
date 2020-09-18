@@ -15,27 +15,28 @@
     <router-view 
     @loggedIn="login($event)"
     @registered="signup($event)"/>
-    <Footer/>
+    <!-- <Footer/> -->
   </div>
 </template>
 
 <script>
 import Header from './components/Header'
-import Footer from './components/Footer'
+// import Footer from './components/Footer'
 
 export default {
   name: 'App',
   components: {
     Header,
-    Footer
+    // Footer
   },
   data: function(){
     return {
       // Store loggedIn and token on App component since other components need these two data 
       loggedIn: false,
       token: null,
-      URL: "http://localhost:8000"
-      // URL: "https://project4-ga.herokuapp.com"
+      URL: "http://localhost:8000",
+      // URL: "https://project4-ga.herokuapp.com",
+      storedSession: ""
     }
   },
   methods: {

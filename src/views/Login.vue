@@ -66,7 +66,6 @@ export default {
                         this.emptyField = false
                     } else{
                         console.log(data.token)
-                        this.storedCredentials = window.sessionStorage.setItem('login', JSON.stringify(data))
                         this.$emit('loggedIn', data)
                         // this.$emit('loggedIn', this.storedCredentials)
                         this.failedAuth = false

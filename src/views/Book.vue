@@ -178,7 +178,7 @@ export default {
     //   console.log(this.editReview)
     // },
     getOneBook: function(e){
-      const {loggedIn, token, URL, genreId} = this.$route.query
+      const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       this.isCardModalActive = true
       this.bookId = e.target.id
@@ -202,7 +202,7 @@ export default {
           this.displayBookReviewAlert = false
         }
 
-         if(data.status == 0){
+        if(data.status == 0){
             this.singleBookStatus = "Read"
         } else if(data.status == 1){
           this.singleBookStatus = "In Progress"
@@ -311,7 +311,6 @@ export default {
       this.loggedIn = loggedIn
       // this.editCardModalActive = true
       console.log(this.bookId)
-      console.log("hi")
       const allBooks = this.books.find(book => {
         return book.id == this.bookId
       })
@@ -335,7 +334,6 @@ export default {
       this.loggedIn = loggedIn
       // this.editCardModalActive = true
       console.log(this.bookId)
-      console.log("hi")
       const allBooks = this.books.find(book => {
         return book.id == this.bookId
       })
@@ -343,7 +341,7 @@ export default {
     },
     // UPDATE BOOK TITLE, AUTHOR, STATUS, URL AFTER POPULATING BOOK FIELDS
     updateBook: function(){
-      const {loggedIn, token, URL, genreId} = this.$route.query
+      const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       this.editTitle = this.titleBook(this.editTitle)
       if(this.editStatus === "Read"){
@@ -375,7 +373,6 @@ export default {
           this.alertUpdate()
         } else{
           this.listBooks()
-          // this.getOneBook()
           this.singleBookReview = data.review
           if(this.singleBookReview == ""){
               this.displayBookReviewAlert = true
@@ -392,7 +389,7 @@ export default {
     },
     // UPDATE BOOK REVIEW AFTER POPULATING FIELD
     updateBookReview: function(){
-      const {loggedIn, token, URL, genreId} = this.$route.query
+      const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
         method: 'patch',
@@ -430,7 +427,7 @@ export default {
     },
     // DELETE BOOK
     deleteBook: function(){
-      const {loggedIn, token, URL, genreId} = this.$route.query
+      const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
         method: 'delete',

@@ -86,17 +86,19 @@ export default {
       openingDropdown: 0,
       // Warnings:
       noGenreName: false,
-      genreExists: false
+      genreExists: false,
+      token: "",
+      // storedSession: ""
     }
+  },
+  created: function(){
+    this.getGenre()
   },
   methods: {
     createGenre: function(){
-      const {token, URL, loggedIn} = this.$route.query
+      const {loggedIn, token, URL} = this.$route.query
       this.loggedIn = loggedIn
-      console.log(this.genreName)
       if (this.genreName === "") {
-        // this.noGenreName = true
-        // this.genreExists = false
         this.alertEmptyField()
       } else {
         this.genreName = this.nameGenre(this.genreName)
@@ -151,10 +153,11 @@ export default {
     },
     getGenre: function(){
       // Pass from App the token, URL, and loggedIn
-      const {token, URL, loggedIn} = this.$route.query
+      const {token, loggedIn, URL} = this.$route.query
       this.tokenFromGenre = token.token
-      this.URL = URL
+      console.log(token)
       this.loggedIn = loggedIn
+      this.URL = URL
       fetch(`${this.URL}/library/genres/`, {
         method: 'get',
         headers: {
@@ -169,9 +172,7 @@ export default {
       })
     },
     getBooks: function(e){
-      if (this.loggedIn){
-        this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL, genreId: e.target.id}})
-      }
+      this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL, genreId: e.target.id}})
     },
     editGenreFields: function(event){
       this.updateModal = true
@@ -186,9 +187,8 @@ export default {
       this.editGenreName = oneGenre.name
     },
     updateGenre: function(){
-      const {token, URL, loggedIn} = this.$route.query
+      const {token, loggedIn, URL} = this.$route.query
       this.loggedIn = loggedIn
-      if(this.loggedIn){
       this.editGenreName = this.nameGenre(this.editGenreName)
       fetch(`${URL}/library/genres/${this.genreUpdateId}/`, {
           method: 'put',
@@ -209,7 +209,6 @@ export default {
           this.updateModal = false
         }
       })
-      }
     },
     // ALERT IF NAME EXISTS WHILE UPDATING A GENRE
     alertUpdate: function(){
@@ -221,7 +220,7 @@ export default {
     },
     // DELETE GENRE
     deleteGenre: function(e){
-      const {token, URL, loggedIn} = this.$route.query
+      const {token, loggedIn, URL} = this.$route.query
       this.loggedIn = loggedIn
       this.genreId = e.target.id
       fetch(`${URL}/library/genres/${this.genreId}`, {
