@@ -101,29 +101,39 @@ export default {
         this.noGenreName = true
         this.genreExists = false
       } else {
-          fetch(`${URL}/library/genres/`, {
-            method: 'post',
-            headers: {
-              "Content-Type": "application/json",
-              authorization: `JWT ${token.token}`
-            },
-            body: JSON.stringify({
-                name: this.genreName
-            })
+        this.genreName = this.nameGenre(this.genreName)
+        console.log(this.genreName)
+        fetch(`${URL}/library/genres/`, {
+          method: 'post',
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `JWT ${token.token}`
+          },
+          body: JSON.stringify({
+              name: this.genreName
           })
-          .then(response => response.json())
-          .then((data) => {
-            if(Array.isArray(data)){
-              this.noGenreName = false
-              this.genreExists = true
-              this.genreName = ""
-            } else{
-              this.getGenre()
-              this.genreName = ""
-              this.noGenreName = false
-            }
-          })
+        })
+        .then(response => response.json())
+        .then((data) => {
+          if(Array.isArray(data)){
+            this.noGenreName = false
+            this.genreExists = true
+            this.genreName = ""
+          } else{
+            this.getGenre()
+            this.genreName = ""
+            this.noGenreName = false
+            this.genreExists = false
+          }
+        })
+      }
+    },
+    nameGenre: function(str){
+      return str.replace(
+        /\b\w+/g, function(s){
+          return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase()
         }
+      )
     },
     getGenre: function(){
       // Pass from App the token, URL, and loggedIn
@@ -163,6 +173,7 @@ export default {
     updateGenre: function(){
       const {token, URL, loggedIn} = this.$route.query
       this.loggedIn = loggedIn
+      this.editGenreName = this.nameGenre(this.editGenreName)
       fetch(`${URL}/library/genres/${this.genreUpdateId}/`, {
           method: 'put',
           headers: {

@@ -257,6 +257,7 @@ export default {
         } else {
           this.stat = 2
         }
+        this.title = this.titleBook(this.title)
         fetch(`${URL}/library/genres/${genreId}/books`, {
           method: 'post',
           headers: {
@@ -274,19 +275,29 @@ export default {
         })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
-          this.createCardModalActive = false
-          this.createBookPage = false
-          this.listBooks()
-          this.emptyfields = false
-          this.title = ""
-          this.author = ""
-          this.imageURL = ""
-          this.review = ""
+          if(data.title[0] == "book with this title already exists."){
+            this.alertUpdate()
+          } else{
+            this.createCardModalActive = false
+            this.createBookPage = false
+            this.listBooks()
+            this.emptyfields = false
+            this.title = ""
+            this.author = ""
+            this.imageURL = ""
+            this.review = ""
+          }
         })
       }
     },
-    // POPULATE EDIT BOOK FIELD
+    titleBook: function(str){
+      return str.replace(
+        /\b\w+/g, function(s){
+          return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase()
+        }
+      )
+    },
+    // POPULATE EDIT TITLE, AUTHOR, STATUS, URL FIELDS
     editBookFields: function(){
       this.editBookInfo = !this.editBookInfo
       const {loggedIn} = this.$route.query
@@ -310,6 +321,7 @@ export default {
       // this.editReview = allBooks.review
       this.editImageURL = allBooks.photo
     },
+    // POPULATE EDIT REVIEW FIELD
     editBookReviewField: function(){
       this.editBookReview = !this.editBookReview
       const {loggedIn} = this.$route.query
@@ -322,10 +334,11 @@ export default {
       })
       this.editReview = allBooks.review
     },
-    // UPDATE BOOK AFTER POPULATING BOOK FIELD
+    // UPDATE BOOK TITLE, AUTHOR, STATUS, URL AFTER POPULATING BOOK FIELDS
     updateBook: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
+      this.editTitle = this.titleBook(this.editTitle)
       if(this.editStatus === "Read"){
         this.editStat = 0
       } else if(this.editStatus  === "In Progress"){
@@ -349,21 +362,28 @@ export default {
       })
       .then(response => response.json())
       .then((data) => {
-        this.listBooks()
-        // this.getOneBook()
-        this.singleBookReview = data.review
-        if(this.singleBookReview == ""){
-            this.displayBookReviewAlert = true
-        } else {
-          this.displayBookReviewAlert = false
+        console.log(data)
+        console.log(data.title)
+        if(data.title[0] == "book with this title already exists."){
+          this.alertUpdate()
+        } else{
+          this.listBooks()
+          // this.getOneBook()
+          this.singleBookReview = data.review
+          if(this.singleBookReview == ""){
+              this.displayBookReviewAlert = true
+          } else {
+            this.displayBookReviewAlert = false
+          }
+          this.editTitle = ""
+          this.editAuthor = ""
+          this.editImageURL = ""
+          this.editBookInfo = false
+          this.isCardModalActive = false
         }
-        this.editTitle = ""
-        this.editAuthor = ""
-        this.editImageURL = ""
-        this.editBookInfo = false
-        this.isCardModalActive = false
       })
     },
+    // UPDATE BOOK REVIEW AFTER POPULATING FIELD
     updateBookReview: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
@@ -391,6 +411,14 @@ export default {
         this.editReview = ""
         this.editBookReview = false
         this.isCardModalActive = false
+      })
+    },
+    // ALERT IF TITLE EXISTS WHILE CREATING OR UPDATING A BOOK
+    alertUpdate: function(){
+      this.$buefy.toast.open({
+          duration: 2000,
+          message: `<b>This book exists in your collection.</b>`,
+          type: 'is-danger'
       })
     },
     // DELETE BOOK
