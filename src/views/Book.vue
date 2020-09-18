@@ -338,7 +338,7 @@ export default {
         this.editStat = 2
       }
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'put',
+        method: 'patch',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
@@ -378,14 +378,16 @@ export default {
       const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'put',
+        method: 'patch',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
         },
         body: JSON.stringify({
           review: this.editReview,
-          genre: Number(genreId)
+          genre: Number(genreId),
+          title: this.singleBookTitle,
+          author: this.singleBookAuthor
         })
       })
       .then(response => response.json())
