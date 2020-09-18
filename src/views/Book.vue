@@ -54,6 +54,7 @@
             <div class="card-content" >
               <!-- TABS -->
               <b-tabs type="is-boxed" expanded>
+                <!-- BOOK INFO -->
                 <b-tab-item label="Information">
                   <div class="singleTitle" v-if="!editBookInfo"><b class="modalInfo"> Title: </b>{{singleBookTitle}}</div><br>
                   <b-input v-model="editTitle" v-if="editBookInfo" maxlength="30" placeholder="Title"></b-input>
@@ -67,7 +68,7 @@
                   </b-field>
                   <b-input v-model="editImageURL" v-if="editBookInfo" placeholder="Book Cover URL"></b-input>
                   <div class="submit-button-container">
-                    <b-button class="submit-book-info" @click="updateBook" v-if="editBookInfo">Submit</b-button>
+                    <b-button class="submit-book-info" v-on:click="updateBook" v-if="editBookInfo">Submit</b-button>
                     <b-button class="submit-book-info" @click="editBookInfo = !editBookInfo" v-if="editBookInfo">Back</b-button>
                   </div>
                   <!-- DROP DOWN -->
@@ -83,11 +84,12 @@
                   </div>
                   <!-- END OF DROP DOWN -->
                 </b-tab-item>
+                <!-- BOOK REVIEW -->
                 <b-tab-item label="Review">
                   <div v-if="displayBookReviewAlert">Click the edit icon to add or edit a review.</div>
                   <div class="content" id="content-review">
                     <div class=singleReview v-if="!editBookReview">{{singleBookReview}}</div>
-                    <b-input v-model="editReview" v-if="editBookReview" type="textarea"></b-input>
+                    <b-input class="textArea"  v-on:keyup.enter="enterNewLine" v-model="editReview" v-if="editBookReview" type="textarea"></b-input>
                     <div class="review-edit-button">
                       <b-button @click="updateBookReview" v-if="editBookReview">Submit</b-button>
                       <b-button @click="editBookReview = !editBookReview" v-if="editBookReview">Back</b-button>
@@ -170,6 +172,11 @@ export default {
     this.listBooks()
   },
   methods: {
+    // enterNewLine: function(e){
+    //   e.preventDefault()
+    //   this.editReview += '&#13;&#10';
+    //   console.log(this.editReview)
+    // },
     getOneBook: function(e){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
@@ -275,7 +282,7 @@ export default {
         })
         .then(response => response.json())
         .then(data => {
-          if(data.title[0] == "book with this title already exists."){
+          if(data.message){
             this.alertUpdate()
           } else{
             this.createCardModalActive = false
@@ -364,7 +371,7 @@ export default {
       .then((data) => {
         console.log(data)
         console.log(data.title)
-        if(data.title[0] == "book with this title already exists."){
+        if(data.message){
           this.alertUpdate()
         } else{
           this.listBooks()
@@ -731,6 +738,10 @@ export default {
 
     .b-radio.radio .control-label {
       padding-right: 0px !important;
+    }
+
+    .textArea{
+      white-space: pre-wrap;
     }
 
   }

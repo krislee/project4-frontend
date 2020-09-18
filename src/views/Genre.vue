@@ -1,6 +1,6 @@
 <template>
   <div class="genre">
-    <button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">Create</button>
+    <button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">+</button>
     <!-- DIV CONTAINING INPUT FIELD SHOWS WHEN CREATE BUTTON IS CLICKED -->
     <div class="inputCreate" v-if="clickedCreate">
       <b-field label="Create Genre">
@@ -8,12 +8,12 @@
         <b-input v-model="genreName" placeholder="Name" rounded maxlength="255"></b-input>
       </b-field>
        <!-- NEW ALERT DIVS -->
-        <div class="warning genre-warning" v-if="noGenreName">
+        <!-- <div class="warning genre-warning" v-if="noGenreName">
            Please provide a genre.
         </div>
         <div class="warning genre-warning" v-if="genreExists">
           This genre already exists.
-        </div>
+        </div> -->
       <button class="genreCreateSubmit" @click="createGenre">Submit</button>
     </div>
     <!-- DISPLAY GENRE -->
@@ -89,17 +89,15 @@ export default {
       genreExists: false
     }
   },
-  created: function(){
-    this.getGenre()
-  },
   methods: {
     createGenre: function(){
       const {token, URL, loggedIn} = this.$route.query
       this.loggedIn = loggedIn
       console.log(this.genreName)
       if (this.genreName === "") {
-        this.noGenreName = true
-        this.genreExists = false
+        // this.noGenreName = true
+        // this.genreExists = false
+        this.alertEmptyField()
       } else {
         this.genreName = this.nameGenre(this.genreName)
         console.log(this.genreName)
@@ -115,15 +113,17 @@ export default {
         })
         .then(response => response.json())
         .then((data) => {
-          if(Array.isArray(data)){
-            this.noGenreName = false
-            this.genreExists = true
+          if(Array.isArray(data) || data.message){
+            // this.noGenreName = false
+            // this.genreExists = true
+            this.alertExistingField()
             this.genreName = ""
           } else{
             this.getGenre()
             this.genreName = ""
             this.noGenreName = false
             this.genreExists = false
+            this.clickedCreate = false
           }
         })
       }
@@ -135,13 +135,26 @@ export default {
         }
       )
     },
+    alertEmptyField: function(){
+      this.$buefy.toast.open({
+          duration: 5000,
+          message: `<b>Please provide a genre. </b>`,
+          type: 'is-danger'
+      })
+    },
+    alertExistingField: function(){
+      this.$buefy.toast.open({
+          duration: 5000,
+          message: `<b>This genre already exists.</b>`,
+          type: 'is-danger'
+      })
+    },
     getGenre: function(){
       // Pass from App the token, URL, and loggedIn
       const {token, URL, loggedIn} = this.$route.query
       this.tokenFromGenre = token.token
       this.URL = URL
       this.loggedIn = loggedIn
-
       fetch(`${this.URL}/library/genres/`, {
         method: 'get',
         headers: {
@@ -156,7 +169,9 @@ export default {
       })
     },
     getBooks: function(e){
-       this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL, genreId: e.target.id}})
+      if (this.loggedIn){
+        this.$router.push({path: 'Book', query: {loggedIn: this.loggedIn, token: this.tokenFromGenre, URL: this.URL, genreId: e.target.id}})
+      }
     },
     editGenreFields: function(event){
       this.updateModal = true
@@ -173,6 +188,7 @@ export default {
     updateGenre: function(){
       const {token, URL, loggedIn} = this.$route.query
       this.loggedIn = loggedIn
+      if(this.loggedIn){
       this.editGenreName = this.nameGenre(this.editGenreName)
       fetch(`${URL}/library/genres/${this.genreUpdateId}/`, {
           method: 'put',
@@ -185,11 +201,25 @@ export default {
           })
       })
       .then(response => response.json())
-      .then(() => {
-        this.getGenre()
-        this.updateModal = false
+      .then((data) => {
+        if(data.message){
+          this.alertUpdate()
+        } else{
+          this.getGenre()
+          this.updateModal = false
+        }
+      })
+      }
+    },
+    // ALERT IF NAME EXISTS WHILE UPDATING A GENRE
+    alertUpdate: function(){
+      this.$buefy.toast.open({
+          duration: 2000,
+          message: `<b>This book exists in your collection.</b>`,
+          type: 'is-danger'
       })
     },
+    // DELETE GENRE
     deleteGenre: function(e){
       const {token, URL, loggedIn} = this.$route.query
       this.loggedIn = loggedIn
@@ -268,10 +298,21 @@ export default {
 
 
 .buttonGenreCreate {
-  margin: 0 auto;
-  float: right;
+  font-size: 40px;
+  border-radius: 50px;
+  border: none;
+  height: 60px;
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 150px;
+  background: #d2d2d2;
 }
 
+.buttonGenreCreate:hover {
+  background: #767676;
+}
 .inputCreate {
   width: 100%;
   display: flex;

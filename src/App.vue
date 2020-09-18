@@ -59,9 +59,8 @@ export default {
       console.log(this.token)
       // Send token down to Genre page after registering (token is stored in data.$route.query) 
       this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
-    }
+    },
   }
-  
 }
 </script>
 

@@ -83,16 +83,43 @@ export default {
                 .then(response => response.json())
                 // Send the data with loggedIn event back up to App since data contains the token
                 .then(data => {
-                    console.log(data)
-                    if (Array.isArray(data.email) || Array.isArray(data.password) || Array.isArray(data.username)){
-                        alert("Enter valid credentials")
+                    if(Array.isArray(data.email)){
+                        if (data.email[0] == "Enter a valid email address."){
+                            this.invalidCredentials("Please enter a valid email address")
+                        } else if(data.email[0] == "user with this email already exists."){
+                            this.invalidCredentials("Email already exists")
+                        }
+                    } else if(Array.isArray(data.username)){
+                        if(data.username[0] == "Ensure this field has at least 8 characters."){
+                            this.invalidCredentials("Username must have at least 8 characters")
+                        } else if(data.username[0] == "user with this username already exists."){
+                            this.invalidCredentials("Username is unavailable")
+                        }
+                    } else if(Array.isArray(data.password)){
+                        if(data.password[0] == "Ensure this field has at least 8 characters."){
+                            this.invalidCredentials("Password must have at least 8 characters")
+                        } 
                     } else {
                         this.$emit('registered', data)
                     }
                 })
             } else{
-                alert("Fields cannot be empty")
+                this.emptyFields()
             }
+        },
+        invalidCredentials: function(message){
+            this.$buefy.toast.open({
+                duration: 2000,
+                message: `<b>${message}</b>`,
+                type: 'is-danger'
+            })
+        },
+        emptyFields: function(){
+            this.$buefy.toast.open({
+                duration: 2000,
+                message: `<b>All fields are required.</b>`,
+                type: 'is-danger'
+            })
         }
     }
 }
