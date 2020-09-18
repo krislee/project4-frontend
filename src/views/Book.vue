@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="create-button-container">
-      <button class="addBook" @click="createCardModalActive = true"><i class="fas fa-plus"></i></button>
+      <button class="addBook" @click="createCardModalActive = true"><i @click="createCardModalActive = true" class="fas fa-plus"></i></button>
     </div>
     <!-- CREATE BOOK MODAL -->
     <b-modal v-model="createCardModalActive" :width="640" scroll="keep" id="create-modal">

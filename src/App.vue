@@ -34,8 +34,8 @@ export default {
       // Store loggedIn and token on App component since other components need these two data 
       loggedIn: false,
       token: null,
-      // URL: "http://localhost:8000",
-      URL: "https://project4-ga.herokuapp.com",
+      URL: "http://localhost:8000",
+      // URL: "https://project4-ga.herokuapp.com",
       storedSession: ""
     }
   },

@@ -15,7 +15,7 @@
       <!-- LINK TO BOOKS WHEN GENRE DIV IS CLICKED -->
       <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard">
         <div v-bind:id="genre.id" @click="getBooks" class="book-link">
-          <p>{{genre.name}}</p>
+          <p v-bind:id="genre.id">{{genre.name}}</p>
         </div>
         <!-- DROP DOWN -->
         <div class="dropdown container" @click="openingDropdown = openingDropdown == genre.id ? 0 : genre.id">
@@ -289,7 +289,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 200px;
+  width: 100%;
   cursor: pointer;
   height: 100%;
 }
@@ -302,6 +302,16 @@ export default {
   width: 100%;
   font-size: 2rem;
   text-align: center;
+}
+
+.genreCard > .dropdown {
+  background: #d2d2d2;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .dropdown-trigger > .edit-genre-button {
