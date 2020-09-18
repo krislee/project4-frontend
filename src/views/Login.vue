@@ -1,13 +1,11 @@
 <template>
     <div class="login">
+        <div class="login-container">
         <!-- USERNAME -->
-        <div class="field">
             <p class="control">
                 <input v-model="loginUsername" class="input" type="text"  placeholder="Username">
             </p>
-        </div>
         <!-- PASSWORD -->
-        <div class="field">
             <p class="control has-icons-left">
                 <input v-model="loginPassword" class="input" type="password" required placeholder="Password">
                 <span class="icon is-small is-left">
@@ -86,15 +84,38 @@ export default {
 .is-primary{
     margin: 40px auto;
 }
+
 .login {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 80%;
+}
+
+.login-container > .control {
+    margin: 20px;
+    width: 80%;
 }
 
 .warning {
     color: red;
+}
+
+@media only screen and (min-width: 700px) {
+
+    .login-container > .control {
+        width: 50%;
+    }
+
 }
 
 </style>

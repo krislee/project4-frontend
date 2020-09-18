@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="create-button-container">
-      <button class="addBook" @click="createCardModalActive = true">+</button>
+      <button class="addBook" @click="createCardModalActive = true"><i class="fas fa-plus"></i></button>
     </div>
     <!-- CREATE BOOK MODAL -->
     <b-modal v-model="createCardModalActive" :width="640" scroll="keep" id="create-modal">
@@ -27,9 +27,6 @@
             <b-field label="Book Cover" message="Add a book cover image URL to personalize your book display" class="longer-width">
               <b-input v-model="imageURL" type="text"></b-input>
             </b-field>
-            <!-- <b-field label="Review" message="Add a review for the book" class="longer-width">
-              <b-input v-model="review" type="textarea"></b-input>
-            </b-field> -->
             <b-button @click="createBook">Submit</b-button>
           </div>
         </div>
@@ -71,18 +68,9 @@
                     <b-button class="submit-book-info" v-on:click="updateBook" v-if="editBookInfo">Submit</b-button>
                     <b-button class="submit-book-info" @click="editBookInfo = !editBookInfo" v-if="editBookInfo">Back</b-button>
                   </div>
-                  <!-- DROP DOWN -->
                   <div class="button-book-container">
-                      <b-dropdown aria-role="list">
-                        <button class="button is-primary" slot="trigger" slot-scope="{ active }" v-if="!editBookInfo">
-                            <span><i class="far fa-edit"></i></span>
-                            <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                        </button>
-                        <b-dropdown-item is-up aria-role="listitem" @click="editBookFields">Edit</b-dropdown-item>
-                        <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
-                      </b-dropdown>
+                    <span v-if="!editBookInfo" @click="editBookFields"><i class="far fa-edit"></i></span>
                   </div>
-                  <!-- END OF DROP DOWN -->
                 </b-tab-item>
                 <!-- BOOK REVIEW -->
                 <b-tab-item label="Review">
@@ -95,18 +83,16 @@
                       <b-button @click="editBookReview = !editBookReview" v-if="editBookReview">Back</b-button>
                     </div>
                   </div>
-                  <!-- DROP DOWN -->
                   <div class="button-book-container">
-                      <b-dropdown aria-role="list">
-                        <button v-if="!editBookReview" class="button is-primary" slot="trigger" slot-scope="{ active }">
-                            <span><i class="far fa-edit"></i></span>
-                            <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                        </button>
-                        <b-dropdown-item is-up aria-role="listitem" @click="editBookReviewField">Edit</b-dropdown-item>
-                        <b-dropdown-item is-up aria-role="listitem" @click="deleteBook">Delete</b-dropdown-item>
-                      </b-dropdown>
+                    <span v-if="!editBookReview" @click="editBookReviewField"><i class="far fa-edit"></i></span>
                   </div>
-                  <!-- END OF DROP DOWN -->
+                </b-tab-item>
+                <b-tab-item label="Delete">
+                  <div class="deleteAlert">
+                    <p><b>Are you sure you want to delete?</b></p> <br> 
+                    <b-button type="is-danger" @click="deleteBook">Yes</b-button>
+                    <b-button type="is-light" @click="isCardModalActive = false">No</b-button>
+                  </div>
                 </b-tab-item>
               </b-tabs>
             </div>
@@ -115,7 +101,7 @@
         <!-- END OF MODAL -->
       <!-- EMPTY BOOK PAGE -->
       <div v-if="createBookPage">
-        Click the + to add books to your collection
+        <b>Click the + to add books to your collection</b>
       </div>
     </div>
   </div>
@@ -580,15 +566,16 @@ export default {
   }
 
   .addBook{
-    font-size: 40px;
+    font-size: 30px;
     border-radius: 50px;
     border: none;
-    height: 60px;
-    width: 60px;
+    height: 50px;
+    width: 50px;
     display: flex;
+    align-items: center;
     justify-content: center;
     cursor: pointer;
-    margin-right: 150px;
+    margin-right: 60px;
     background: #d2d2d2;
   }
 
@@ -739,6 +726,47 @@ export default {
 
     .textArea{
       white-space: pre-wrap;
+    }
+
+    .addBook {
+      height: 60px;
+      width: 60px;
+      font-size: 35px;
+      margin-right: 60px;
+    }
+
+    @media only screen and (min-width: 1100px) {
+
+      .addBook {
+        margin-right: 0px;
+      }
+
+    }
+
+    @media only screen and (min-width: 1200px) {
+
+      .addBook {
+        margin-right: -50px;
+      }
+
+    }
+
+    @media only screen and (min-width: 1300px) {
+
+      .addBook {
+        margin-right: 50px;
+      }
+
+    }
+
+  
+
+    @media only screen and (min-width: 1408px) {
+
+      .addBook {
+        margin-right: 150px;
+      }
+
     }
 
   }

@@ -1,52 +1,44 @@
 <template>
-    <div class="login">
+    <div class="register">
+        <div class="register-container">
         <!-- FIRST NAME -->
-        <div class="field">
             <p class="control has-icons-left">
                 <input v-model="firstName" class="input" type="text"  placeholder="First Name">
                 <span class="icon is-small is-left">
                     <i class="fas fa-pen"></i>
                 </span>
             </p>
-        </div>
         <!-- LAST NAME -->
-        <div class="field">
             <p class="control has-icons-left">
                 <input v-model="lastName" class="input" type="text"  placeholder="Last Name">
                 <span class="icon is-small is-left">
                     <i class="fas fa-pen"></i>
                 </span>
             </p>
-        </div>
         <!-- EMAIL -->
-        <div class="field">
             <p class="control has-icons-left">
                 <input v-model="email" class="input" type="email" placeholder="Email">
                 <span class="icon is-small is-left">
                     <i class="fas fa-envelope"></i>
                 </span>
             </p>
-        </div>
         <!-- USERNAME -->
-        <div class="field">
             <p class="control has-icons-left">
                 <input v-model="registerUsername" class="input" type="text"  placeholder="Username">
                 <span class="icon is-small is-left">
                     <i class="fas fa-user-circle"></i>
                 </span>
             </p>
-        </div>
         <!-- PASSWORD -->
-        <div class="field">
             <p class="control has-icons-left">
                 <input v-model="registerPassword" class="input" type="password" required placeholder="Password">
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
             </p>
+            <!-- SIGN UP BUTTON -->
+            <button class="button is-primary" @click="handleSignUp">Sign Up</button>
         </div>
-        <!-- SIGN UP BUTTON -->
-        <button class="button is-primary" @click="handleSignUp">Sign Up</button>
     </div>
 </template>
 
@@ -133,11 +125,33 @@ export default {
 .is-primary{
     margin: 40px auto;
 }
-.login {
+
+.register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 100%;
+}
+
+.register-container > .control {
+    margin: 20px;
+    width: 80%;
+}
+
+@media only screen and (min-width: 600px) {
+
+    .register-container > .control {
+        width: 35%;
+    }
+
 }
 
 </style>

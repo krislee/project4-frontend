@@ -1,19 +1,13 @@
 <template>
   <div class="genre">
-    <button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">+</button>
+    <div class="genre-create-container">
+      <button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">+</button>
+    </div>
     <!-- DIV CONTAINING INPUT FIELD SHOWS WHEN CREATE BUTTON IS CLICKED -->
     <div class="inputCreate" v-if="clickedCreate">
       <b-field label="Create Genre">
-        <!-- Grab genre name through v-model="genreName" for this.createGenre()-->
         <b-input v-model="genreName" placeholder="Name" rounded maxlength="255"></b-input>
       </b-field>
-       <!-- NEW ALERT DIVS -->
-        <!-- <div class="warning genre-warning" v-if="noGenreName">
-           Please provide a genre.
-        </div>
-        <div class="warning genre-warning" v-if="genreExists">
-          This genre already exists.
-        </div> -->
       <button class="genreCreateSubmit" @click="createGenre">Submit</button>
     </div>
     <!-- DISPLAY GENRE -->
@@ -21,7 +15,7 @@
       <!-- LINK TO BOOKS WHEN GENRE DIV IS CLICKED -->
       <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard">
         <div v-bind:id="genre.id" @click="getBooks" class="book-link">
-          {{genre.name}} 
+          <p>{{genre.name}}</p>
         </div>
         <!-- DROP DOWN -->
         <div class="dropdown container" @click="openingDropdown = openingDropdown == genre.id ? 0 : genre.id">
@@ -59,6 +53,10 @@
         </b-modal>
         <!-- END OF EDIT MODAL -->
       </div>
+       <!-- EMPTY GENRE PAGE -->
+      <div v-if="createGenrePage">
+        <b>Click the + to add genre to your collection</b>
+      </div>
     </div>
   </div>
 </template>
@@ -87,8 +85,9 @@ export default {
       // Warnings:
       noGenreName: false,
       genreExists: false,
-      token: "",
-      // storedSession: ""
+      // token: "",
+      // Empty Genre Page:
+      createGenrePage: false
     }
   },
   created: function(){
@@ -126,6 +125,7 @@ export default {
             this.noGenreName = false
             this.genreExists = false
             this.clickedCreate = false
+            this.createGenrePage = false
           }
         })
       }
@@ -167,8 +167,13 @@ export default {
       .then(response => response.json())
       .then(data => {
         console.log(data)
-        this.genres = data.results
-        console.log(this.genres)
+        if(data.count == 0){
+          this.createGenrePage = true
+          this.genres = []
+        } else {
+          this.genres = data.results
+          console.log(this.genres)
+        }
       })
     },
     getBooks: function(e){
@@ -255,7 +260,7 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .genre-cards > a {
@@ -287,7 +292,16 @@ export default {
   width: 200px;
   cursor: pointer;
   height: 100%;
-  font-size: 90%;
+}
+
+.book-link > p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-size: 2rem;
+  text-align: center;
 }
 
 .dropdown-trigger > .edit-genre-button {
@@ -295,6 +309,12 @@ export default {
   border: none;
 }
 
+.genre-create-container {
+  width: 100%;
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 
 .buttonGenreCreate {
   font-size: 40px;
@@ -305,7 +325,8 @@ export default {
   display: flex;
   justify-content: center;
   cursor: pointer;
-  margin-right: 150px;
+  margin-right: 60px;
+  margin-top: 20px;
   background: #d2d2d2;
 }
 
@@ -354,6 +375,31 @@ export default {
   width: 400px;
 }
 
+@media only screen and (min-width: 320px) {
+
+  .book-link > p {
+    font-size: 0.9em;
+  }
+
+}
+
+@media only screen and (min-width: 400px) {
+
+  .book-link > p {
+    font-size: 1.2em;
+  }
+
+}
+
+@media only screen and (min-width: 500px) {
+
+  .book-link > p {
+    font-size: 1.4em;
+  }
+
+}
+
+
 @media only screen and (min-width: 620px) {
 
   .genre-cards {
@@ -365,12 +411,53 @@ export default {
     margin: 30px;
   }
 
+  .book-link > p {
+    font-size: 1.1em;
+  }
+
 }
+
+@media only screen and (min-width: 700px) {
+
+  .book-link > p {
+    font-size: 1.4em;
+  }
+
+}
+
+@media only screen and (min-width: 800px) {
+
+  .book-link > p {
+    font-size: 1.6em;
+  }
+
+}
+
+@media only screen and (min-width: 1000px) {
+
+  .book-link > p {
+    font-size: 2em;
+  }
+
+}
+
 
 @media only screen and (min-width: 1080px) {
 
   .genreCard {
     width: 300px;
+  }
+
+  .book-link > p {
+    font-size: 1.4em;
+  }
+
+}
+
+@media only screen and (min-width: 1100px) {
+
+  .book-link > p {
+    font-size: 1.5em;
   }
 
 }
