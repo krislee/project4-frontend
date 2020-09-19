@@ -230,7 +230,7 @@ export default {
       const {token, loggedIn, URL} = this.$route.query
       this.loggedIn = loggedIn
       this.genreId = e.target.id
-      fetch(`${URL}/library/genres/${this.genreId}`, {
+      fetch(`${URL}/library/genres/${this.genreId}/`, {
           method: 'delete',
           headers: {
             authorization: `JWT ${token.token}`
