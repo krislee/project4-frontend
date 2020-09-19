@@ -154,9 +154,11 @@ export default {
     getGenre: function(){
       // Pass from App the token, URL, and loggedIn
       const {token, loggedIn, URL} = this.$route.query
+      console.log(loggedIn)
       this.tokenFromGenre = token.token
       console.log(token)
       this.loggedIn = loggedIn
+      console.log(this.loggedIn)
       this.URL = URL
       fetch(`${this.URL}/library/genres/`, {
         method: 'get',
