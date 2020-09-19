@@ -22,7 +22,7 @@
 Click [here](https://github.com/krislee/project4-backend) to view backend repository.
 
 ## Live Website
-Click [here](https://project4-ga.netlify.app/#/) to view live website.
+Click [here](https://official-library.netlify.app/#/) to view live website.
 
 ## Project Description
 The Book Collection Tracker is a tracker for book lovers and students to keep track of the books they are readind. It will allow them to track the progress of their reading status of each book and what they thought of the book. The frontend application is built using Vue framework and Boostrap CSS library. The tracker allows user to sign up and login to their book collection. The book collection will consist of a genre dashboard, listing all the genres the user has made, and a book dashboard, listing all the books of each genre the user has created. The user also has the option of updating and deleting the genres or books in their respective dashboards. 
