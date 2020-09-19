@@ -2,7 +2,8 @@
   <div class="header">
     <b-navbar>
       <template slot="brand">
-        <b-navbar-item tag="router-link" :to="{ path: '/' }">
+        <!-- tag="router-link" :to="{ path: '/' }" -->
+        <b-navbar-item>
           <h1><strong> B.C. </strong></h1>
         </b-navbar-item>
       </template>
