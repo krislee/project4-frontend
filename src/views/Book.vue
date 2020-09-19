@@ -61,7 +61,7 @@
                   <b-field class="longer-width" v-if="editBookInfo" id="status-container">
                     <b-radio v-model="editStatus" name="status" native-value="Read">Read</b-radio>
                     <b-radio v-model="editStatus" name="status" native-value="In Progress">In Progress</b-radio>
-                    <b-radio v-model="editStatus" name="status" native-value="Not Read">Not Read</b-radio>
+                    <b-radio v-model="editStatus" name="status" native-value="Not Read" checked>Not Read</b-radio>
                   </b-field>
                   <b-input v-model="editImageURL" v-if="editBookInfo" placeholder="Book Cover URL"></b-input>
                   <div class="submit-button-container">

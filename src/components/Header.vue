@@ -13,9 +13,6 @@
          <b-navbar-item href="#">
           <router-link :to="{name: 'Genre', query: {URL: this.URL, token: this.token, loggedIn: this.loggedIn}}" v-if="loggedIn">Genres</router-link>
         </b-navbar-item>
-        <b-navbar-item href="#">
-          <router-link to="/Book" v-if="loggedIn">Books</router-link>
-        </b-navbar-item>
       </template>
 
       <template slot="end">

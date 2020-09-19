@@ -208,21 +208,21 @@ export default {
       .then(response => response.json())
       .then((data) => {
         if(data.message){
-          this.alertUpdate()
+          this.alertExistingField()
         } else{
           this.getGenre()
           this.updateModal = false
         }
       })
     },
-    // ALERT IF NAME EXISTS WHILE UPDATING A GENRE
-    alertUpdate: function(){
-      this.$buefy.toast.open({
-          duration: 2000,
-          message: `<b>This book exists in your collection.</b>`,
-          type: 'is-danger'
-      })
-    },
+    // // ALERT IF NAME EXISTS WHILE UPDATING A GENRE
+    // alertUpdate: function(){
+    //   this.$buefy.toast.open({
+    //       duration: 2000,
+    //       message: `<b>This book exists in your collection.</b>`,
+    //       type: 'is-danger'
+    //   })
+    // },
     // DELETE GENRE
     deleteGenre: function(e){
       const {token, loggedIn, URL} = this.$route.query
