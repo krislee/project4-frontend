@@ -35,7 +35,7 @@ export default {
       loggedIn: false,
       token: null,
       // URL: "http://localhost:8000",
-      URL: "https://project4-ga.herokuapp.com",
+      URL: 'https://libraryproj.herokuapp.com',
       storedSession: ""
     }
   },
