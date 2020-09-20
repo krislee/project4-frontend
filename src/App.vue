@@ -34,9 +34,8 @@ export default {
       // Store loggedIn and token on App component since other components need these two data 
       loggedIn: false,
       token: null,
-      // URL: 'https://libraryproj.herokuapp.com',
+      URL: 'https://libraryproj.herokuapp.com',
       // URL: 'https://project4-ga.herokuapp.com',
-      URL: 'https://testcommentsproj4.herokuapp.com'
     }
   },
   methods: {
