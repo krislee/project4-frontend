@@ -9,9 +9,9 @@
         <h1>You can formulate a review, keep track of your reading status, and personalize your book with a book image cover.</h1><br>
         <h1><span><b>Let B.C. do the book tracking, and you do the reading</b></span></h1>
       </div>
-      <div>
+      <!-- <div>
         <b-button> <router-link :to="{name:'Signup', query: {URL: this.URL}}">Signup</router-link></b-button>
-      </div>
+      </div> -->
   </div>
   
 </template>
