@@ -166,8 +166,11 @@ export default {
     getOneBook: function(e){
       const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
+      // Modal to show the book info will pop up
       this.isCardModalActive = true
+      // Store the id of the book to bookId to be used later for update or delete
       this.bookId = e.target.id
+
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
         method: 'get',
           headers: {
@@ -176,18 +179,17 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         this.singleBookTitle = data.title
         this.singleBookAuthor = data.author
         this.singleBookReview = data.review
         this.singleBookStatus = data.status
-
+        // If no review has been made yet a div containing the statement to make the review will appear 
         if(this.singleBookReview == ""){
           this.displayBookReviewAlert = true
         } else {
           this.displayBookReviewAlert = false
         }
-
+        // Convert the statuses sent from server as integer to strings
         if(data.status == 0){
             this.singleBookStatus = "Read"
         } else if(data.status == 1){
@@ -200,6 +202,7 @@ export default {
     listBooks: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
+
       fetch(`${URL}/library/genres/${genreId}/books`, {
         method: 'get',
           headers: {
@@ -209,11 +212,14 @@ export default {
       .then(response => response.json())
       .then(data => {
         if(Array.isArray(data)){
+          // Div that states create books will not display since there are no books
           this.createBookPage = true
+          // Even though on the server side the book is deleted the last book is still displayed so when the message that states there are no books after deleting the last book, we empty the books data
           this.books = {}
         } else {
-          console.log(data)
+          // Loop through books data in template
           this.books = data.results
+          // If no review has been made yet a div containing the statement to make the review will appear 
           this.singleBookReview = data.review
           if(this.singleBookReview == ""){
             this.displayBookReviewAlert = true
@@ -224,25 +230,15 @@ export default {
     createBook: function(){
       const {loggedIn, token, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
+
       if (this.title === "" && this.author === "") {
-        this.$buefy.toast.open({
-          duration: 2000,
-          message: `<b>Title and Author fields cannot be blank</b>`,
-          type: 'is-danger'
-        })
+        this.alertEmptyField("Title and Author fields cannot be blank")
       } else if (this.author === "") {
-        this.$buefy.toast.open({
-          duration: 2000,
-          message: `<b>Author field cannot be blank</b>`,
-          type: 'is-danger'
-        })
+        this.alertEmptyField("Author field cannot be blank")
       } else if (this.title === "") {
-        this.$buefy.toast.open({
-          duration: 2000,
-          message: `<b>Title field cannot be blank</b>`,
-          type: 'is-danger'
-        })
+        this.alertEmptyField("Title field cannot be blank")
       } else {
+        // Convert the reading statuses to integers to send back to server
         if(this.status === "Read"){
           this.stat = 0
         } else if(this.status === "In Progress"){
@@ -250,6 +246,7 @@ export default {
         } else {
           this.stat = 2
         }
+        // Title case the book title before sending to server
         this.title = this.titleBook(this.title)
         fetch(`${URL}/library/genres/${genreId}/books`, {
           method: 'post',
@@ -268,13 +265,16 @@ export default {
         })
         .then(response => response.json())
         .then(data => {
+          // Server sends a message if book exists already, so alert will pop up
           if(data.message){
             this.alertUpdate()
           } else{
+            // Modal for creating will close
             this.createCardModalActive = false
+            // Books exist so div that states create books will not display
             this.createBookPage = false
             this.listBooks()
-            this.emptyfields = false
+            // Empty out input fields after submitting create
             this.title = ""
             this.author = ""
             this.imageURL = ""
@@ -283,6 +283,7 @@ export default {
         })
       }
     },
+    // TITLE CASE THE BOOK TITLE
     titleBook: function(str){
       return str.replace(
         /\b\w+/g, function(s){
@@ -293,16 +294,18 @@ export default {
     // POPULATE EDIT TITLE, AUTHOR, STATUS, URL FIELDS
     editBookFields: function(){
       this.editBookInfo = !this.editBookInfo
+
       const {loggedIn} = this.$route.query
       this.loggedIn = loggedIn
-      // this.editCardModalActive = true
-      console.log(this.bookId)
+
       const allBooks = this.books.find(book => {
         return book.id == this.bookId
       })
       this.editTitle = allBooks.title
       this.editAuthor = allBooks.author
       this.editStatus = allBooks.status
+      this.editImageURL = allBooks.photo
+
       if (this.editStatus == 0){
         this.editStatus = "Read"
       } else if(this.editStatus == 1){
@@ -310,16 +313,14 @@ export default {
       } else {
         this.editStatus = "Not Read"
       }
-      // this.editReview = allBooks.review
-      this.editImageURL = allBooks.photo
     },
     // POPULATE EDIT REVIEW FIELD
     editBookReviewField: function(){
       this.editBookReview = !this.editBookReview
+
       const {loggedIn} = this.$route.query
       this.loggedIn = loggedIn
-      // this.editCardModalActive = true
-      console.log(this.bookId)
+
       const allBooks = this.books.find(book => {
         return book.id == this.bookId
       })
@@ -329,7 +330,11 @@ export default {
     updateBook: function(){
       const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
+
+      // Title case the book before sending to server
       this.editTitle = this.titleBook(this.editTitle)
+
+      // Convert reading status to integers to send back to server
       if(this.editStatus === "Read"){
         this.editStat = 0
       } else if(this.editStatus  === "In Progress"){
@@ -353,8 +358,6 @@ export default {
       })
       .then(response => response.json())
       .then((data) => {
-        console.log(data)
-        console.log(data.title)
         if(data.message){
           this.alertUpdate()
         } else{
@@ -393,7 +396,6 @@ export default {
       .then(response => response.json())
       .then((data) => {
         this.listBooks()
-        // this.getOneBook()
         this.singleBookReview = data.review
         if(this.singleBookReview == ""){
             this.displayBookReviewAlert = true
@@ -410,6 +412,14 @@ export default {
       this.$buefy.toast.open({
           duration: 2000,
           message: `<b>This book exists in your collection.</b>`,
+          type: 'is-danger'
+      })
+    },
+    // ALERT IF FIELDS ARE EMPTY WHEN CREATING BOOK
+    alertEmptyField: function(message){
+      this.$buefy.toast.open({
+          duration: 2000,
+          message: `<b>${message}</b>`,
           type: 'is-danger'
       })
     },

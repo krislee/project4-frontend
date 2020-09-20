@@ -12,10 +12,10 @@
 |Day 3| Can update genres on genre dashboard| Complete
 |Day 3| Can delete genres on genre dashboard| Complete
 |Day 4| Can create new books on book dashboard| Complete
-|Day 4| Can list all books on book dashboard| Ccomplete
+|Day 4| Can list all books on book dashboard| Complete
 |Day 4| Can update books on book dashboard| Complete
 |Day 4| Can delete books on book dashboard| Complete
-|Day 5| CSS & Bug Fixes | Incomplete
+|Day 5| CSS & Bug Fixes | Complete
 |Day 6| Final Touches & CSS | Incomplete
 
 ## Backend
@@ -75,34 +75,35 @@ The Book Collection Tracker is a tracker for book lovers and students to keep tr
 #### MVP
 | Component | Priority | Estimated Time | Time Invetsted | Actual Time |
 | --- | :---: |  :---: | :---: | :---: |
-| Responsive Navigation Bar | H | 2hr | -hr | -hr|
-| User login/sign up page | H | 4hr | -hr | -hr|
-| Genre Dashboard | H | 3hr | -hr | -hr|
-| Modal for create button for genre | H | 1.5hr| -hr | -hr |
-| Create function for create genre modal| H | 3hr | -hr | -hr|
-| Modal for update button for genre | H | 2hr| -hr | -hr |
-| Update function for update genre modal | H | 3hr | -hr | -hr|
-| Delete function for genre | H | 1.5hr | -hr | -hr|
-| Book dashboard | H | 3hr | -hr | -hr|
-| Modal for one book display | H | 2hr | -hr | -hr|
-| Modal for create button for book  | H | 2hr | -hr | -hr|
-| Create function for create book modal | H | 3hr | -hr | -hr|
-| Modal for update button for book | H | 1hr| 2hr | -hr |
-| Update function for update book modal | H | 4hr | -hr | -hr|
-| Delete function for book | H | 1.5hr | -hr | -hr|
-| Test mobile responsiveness | H | 4hr | -hr | -hr|
-| Total | H | 40.5hrs| -hrs | -hrs |
+| Responsive Navigation Bar | H | 2hr | 0.5hr | 0.5hr|
+| User login/sign up page | H | 4hr | 7hr | 7hr|
+| Genre Dashboard | H | 3hr | 1hr | 1hr|
+| Modal for create button for genre | H | 1.5hr| 0.5hr | 0.5hr |
+| Create function for create genre modal| H | 3hr | 1hr | 1hr|
+| Modal for update button for genre | H | 2hr| 5hr | 5hr |
+| Update function for update genre modal | H | 3hr | 3hr | 3hr|
+| Delete function for genre | H | 1.5hr | 0.5hr | 0.5hr|
+| Book dashboard | H | 3hr | 5hr | 5hr|
+| Modal for one book display | H | 2hr | 5hr | 5hr|
+| Modal for create button for book  | H | 2hr | 1hr | 1hr|
+| Create function for create book modal | H | 3hr | 1.5hr | 1.5hr|
+| Modal for update button for book | H | 1hr| 2hr | 2hr |
+| Update function for update book modal | H | 4hr | 3hr | 3hr|
+| Delete function for book | H | 1.5hr | 0.5hr | 0.5hr|
+| Test mobile responsiveness | H | 4hr | 3hr | 3hr|
+| CSS | H | 5hr | 8hr | 8hr|
+| Total | H | 45.5hrs| 47.5hrs | 47.5hrs |
 
 #### PostMVP
 | Component | Priority | Estimated Time | Time Invetsted | Actual Time |
 | --- | :---: |  :---: | :---: | :---: |
-| CSS Animation | L | 3hr | -hr | -hr|
-| Search function | M | 3hr | -hr | -hr|
-| Refractor code | M | 3hr | -hr | -hr|
-| Research GoodReads API | H | 6hr | -hr | -hr|
-| Use GoodReads API | H | 6hr | -hr | -hr|
-| Make own icon | L | 2hr | -hr | -hr|
-| Total | H | 23hrs| -hrs | -hrs |
+| CSS Animation | L | 3hr | 0hr | 0hr|
+| Search function | M | 3hr | 0hr | 0hr|
+| Refractor code | M | 3hr | 5hr | 5hr|
+| Research GoodReads API | H | 6hr | 0hr | 0hr|
+| Use GoodReads API | H | 6hr | 0hr | 0hr|
+| Make own icon | L | 2hr | 0hr | 0hr|
+| Total | H | 23hrs| 6hrs | 6hrs |
 
 ## Additional Libraries
 - Bootstrap
@@ -110,17 +111,90 @@ The Book Collection Tracker is a tracker for book lovers and students to keep tr
 
 ## Code Snippet
 
-Use this section to include a brief code snippet of functionality that you are proud of an a brief description  
+To output the book information on a modal when the book is clicked posed a dilemma. The code for the modal could not be placed inside the loop that went through each book to display each of the book's information. This is because when the book is clicked all the modals for all the books opened as well. Therefore, the code for the modal needed to be placed outside of the loop. Yet, being outside of the loop meant meant the modal would not have access to the book's information. To overcome this, another method needs to be created to do a get request for the information of one book. In the method, the information is stored in several data which will be called in the template and will be run when one book is clicked. 
 
+```html
+<template>
+	..............
+	<div class="bookContainer">
+      	<div class="books" v-for="book of books" v-bind:key="book.id" v-bind:id="book.id">
+			<div v-bind:style='{ backgroundSize: "cover", backgroundImage: `url("${book.photo}")` }' v-bind:id="book.id" @click="getOneBook">
+			<h1 v-bind:id="book.id" v-if='book.photo == ""' class="bookTitle">{{book.title}}</h1>
+			<h2 v-bind:id="book.id" v-if='book.photo == ""' class="bookAuthor">{{book.author}}</h2>
+			</div>
+			<div>
+				<div class="bookStatusIcon" v-if="bookIconRead = book.status == 0 ? true: false"><i class="fas fa-check-circle"></i></div>
+				<div class="bookStatusIcon" v-if="bookIconInProgress = book.status == 1 ? true: false"><i class="fas fa-book-open"></i></div>
+				<div class="bookStatusIcon" v-if="bookIconNotRead = book.status == 2 ? true: false"><i class="fas fa-book"></i></div>
+			</div>
+      	</div>
+		<b-modal v-model="isCardModalActive" scroll="keep">
+			<div class="card review-card">
+			<div class="card-content" >
+				<!-- TABS -->
+				<b-tabs type="is-boxed" expanded>
+				<!-- BOOK INFO -->
+				<b-tab-item label="Information">
+					<div class="singleTitle" v-if="!editBookInfo"><b class="modalInfo"> Title: </b>{{singleBookTitle}}</div><br>
+					..............
+					<div class="singleAuthor" v-if="!editBookInfo"><b class="modalInfo">Author: </b>{{singleBookAuthor}}</div><br>
+					..............
+					<div class="singleStatus" v-if="!editBookInfo"><b class="modalInfo">Status: </b>{{singleBookStatus}}</div><br>
+					..............
+				</b-tab-item>
+				<!-- BOOK REVIEW -->
+				<b-tab-item label="Review">
+					..............
+					<div class="content" id="content-review">
+					<div class=singleReview v-if="!editBookReview">{{singleBookReview}}</div>
+					..............
+					</div>
+				</b-tab-item>
+				</b-tabs>
+			</div>
+			</div>
+		</b-modal>
+		..............	
+<template>
 ```
-function reverse(string) {
-	// here is the code to reverse a string of text
+```javascript
+getOneBook: function(e){
+	const {token, loggedIn, URL, genreId} = this.$route.query
+	this.loggedIn = loggedIn
+	this.isCardModalActive = true
+	this.bookId = e.target.id
+	fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
+	method: 'get',
+		headers: {
+		authorization: `JWT ${token}`
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+	console.log(data)
+	this.singleBookTitle = data.title
+	this.singleBookAuthor = data.author
+	this.singleBookReview = data.review
+	this.singleBookStatus = data.status
+
+	if(this.singleBookReview == ""){
+		this.displayBookReviewAlert = true
+	} else {
+		this.displayBookReviewAlert = false
+	}
+
+	if(data.status == 0){
+		this.singleBookStatus = "Read"
+	} else if(data.status == 1){
+		this.singleBookStatus = "In Progress"
+	} else {
+		this.singleBookStatus = "Have Not Read"
+	}
+	})
 }
 ```
 
 ## Issues and Resolutions
- Use this section to list of all major issues encountered and their resolution.
 
-#### SAMPLE.....
-**ERROR**: app.js:34 Uncaught SyntaxError: Unexpected identifier                                
-**RESOLUTION**: Missing comma after first object in sources {} object
+**ERROR**: Access to fetch at 'https://libraryproj.herokuapp.com/library/genres/11/books/13/' from origin 'http://localhost:8080' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.                                 
+**RESOLUTION**: The error is relayed when making a patch request but not a put request. The updateBook and updateBookReview methods are revised to make fetches with put requests instead of patch requests. 
