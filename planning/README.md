@@ -106,8 +106,7 @@ The Book Collection Tracker is a tracker for book lovers and students to keep tr
 | Total | H | 23hrs| 6hrs | 6hrs |
 
 ## Additional Libraries
-- Bootstrap
-- Buefy (?) 
+- Buefy  
 
 ## Code Snippet
 
