@@ -54,7 +54,7 @@
                 <!-- BOOK INFO -->
                 <b-tab-item label="Information">
                   <div class="singleTitle" v-if="!editBookInfo"><b class="modalInfo"> Title: </b>{{singleBookTitle}}</div><br>
-                  <b-input v-model="editTitle" v-if="editBookInfo" maxlength="30" placeholder="Title"></b-input>
+                  <b-input v-model="editTitle" v-if="editBookInfo" maxlength="100" placeholder="Title"></b-input>
                   <div class="singleAuthor" v-if="!editBookInfo"><b class="modalInfo">Author: </b>{{singleBookAuthor}}</div><br>
                   <b-input v-model="editAuthor" v-if="editBookInfo" maxlength="40" placeholder="Author"></b-input>
                   <div class="singleStatus" v-if="!editBookInfo"><b class="modalInfo">Status: </b>{{singleBookStatus}}</div><br>
