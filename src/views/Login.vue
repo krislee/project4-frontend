@@ -14,12 +14,12 @@
             </p>
         </div>
         <!-- NEW ALERT DIVS -->
-        <div class="warning" v-if="failedAuth">
+        <!-- <div class="warning" v-if="failedAuth">
             The credentials you have provided are invalid. Please try again.
         </div>
         <div class="warning" v-if="emptyField">
             You cannot provide empty fields.
-        </div>
+        </div> -->
         <!-- LOGIN BUTTON -->
         <button class="button is-primary" @click="handleLogin">Login</button>
     </div>
@@ -42,8 +42,9 @@ export default {
     methods: {
         handleLogin: function(){
             if (this.loginUsername === "" || this.loginPassword === "") {
-                this.emptyField = true
-                this.failedAuth = false
+                // this.emptyField = true
+                // this.failedAuth = false
+                this.alertEmptyField()
             } else if (this.loginUsername && this.loginPassword) {
                 fetch(`${this.$route.query.URL}/auth/users/login/`, {
                     method: "post",
@@ -60,17 +61,32 @@ export default {
                 .then(data => {
                     console.log(data)
                     if(data.non_field_errors){
-                        this.failedAuth = true
-                        this.emptyField = false
+                        // this.failedAuth = true
+                        // this.emptyField = false
+                        this.alertInvalidField()
                     } else{
                         console.log(data.token)
                         this.$emit('loggedIn', data)
                         // this.$emit('loggedIn', this.storedCredentials)
-                        this.failedAuth = false
-                        this.emptyField = false
+                        // this.failedAuth = false
+                        // this.emptyField = false
                     }
                 })
             }
+        },
+        alertEmptyField: function(){
+            this.$buefy.toast.open({
+                duration: 2000,
+                message: `<b>Fields cannot be blank</b>`,
+                type: 'is-danger'
+            })
+        },
+        alertInvalidField: function(){
+            this.$buefy.toast.open({
+                duration: 2000,
+                message: `<b>The credentials you have provided are invalid. Please try again.</b>`,
+                type: 'is-danger'
+            })
         }
     }
 }

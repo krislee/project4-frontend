@@ -1,14 +1,14 @@
 <template>
   <div class="genre">
     <div class="genre-create-container">
-      <b-button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">+</b-button>
+      <button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">+</button>
     </div>
     <!-- DIV CONTAINING INPUT FIELD SHOWS WHEN CREATE BUTTON IS CLICKED -->
     <div class="inputCreate" v-if="clickedCreate">
       <b-field label="Create Genre">
         <b-input v-model="genreName" placeholder="Name" rounded maxlength="255"></b-input>
       </b-field>
-      <button class="genreCreateSubmit" @click="createGenre">Submit</button>
+      <b-button class="genreCreateSubmit" @click="createGenre">Submit</b-button>
     </div>
     <!-- DISPLAY GENRE -->
     <div class="genre-cards" v-if="URL && tokenFromGenre && loggedIn">
