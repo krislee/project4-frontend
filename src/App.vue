@@ -38,13 +38,6 @@ export default {
       URL: 'https://project4-ga.herokuapp.com',
     }
   },
-  created: function(){
-    if (this.loggedIn){
-      this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
-    } else {
-      this.$router.push('/')
-    }
-  },
   methods: {
     // Token gets stored in App
     login: function(e){
