@@ -13,13 +13,6 @@
                 </span>
             </p>
         </div>
-        <!-- NEW ALERT DIVS -->
-        <!-- <div class="warning" v-if="failedAuth">
-            The credentials you have provided are invalid. Please try again.
-        </div>
-        <div class="warning" v-if="emptyField">
-            You cannot provide empty fields.
-        </div> -->
         <!-- LOGIN BUTTON -->
         <button class="button is-primary" @click="handleLogin">Login</button>
     </div>
@@ -61,15 +54,22 @@ export default {
                 .then(data => {
                     console.log(data)
                     if(data.non_field_errors){
-                        // this.failedAuth = true
-                        // this.emptyField = false
                         this.alertInvalidField()
                     } else{
                         console.log(data.token)
                         this.$emit('loggedIn', data)
-                        // this.$emit('loggedIn', this.storedCredentials)
-                        // this.failedAuth = false
-                        // this.emptyField = false
+                        this.loggedIn = true
+                        this.token = data.token
+                        this.username = data.username
+                        this.email = data.email
+                    }
+                })
+                .then(() => {
+                    if(this.loggedIn){
+                        localStorage.setItem('token', this.token)
+                        // localStorage.setItem('username', this.username)
+                        // localStorage.setItem('email', this.email)
+                        localStorage.setItem('loggedIn', this.loggedIn)
                     }
                 })
             }

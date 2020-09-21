@@ -1,7 +1,7 @@
 <template>
   <div class="genre">
     <div class="genre-create-container">
-      <button class="buttonGenreCreate" v-if="loggedIn" @click="clickedCreate = !clickedCreate">+</button>
+      <button class="buttonGenreCreate" @click="clickedCreate = !clickedCreate">+</button>
     </div>
     <!-- DIV CONTAINING INPUT FIELD SHOWS WHEN CREATE BUTTON IS CLICKED -->
     <div class="inputCreate" v-if="clickedCreate">
@@ -11,7 +11,7 @@
       <b-button class="genreCreateSubmit" @click="createGenre">Submit</b-button>
     </div>
     <!-- DISPLAY GENRE -->
-    <div class="genre-cards" v-if="URL && tokenFromGenre && loggedIn">
+    <div class="genre-cards" v-if="URL && tokenFromGenre">
       <!-- LINK TO BOOKS WHEN GENRE DIV IS CLICKED -->
       <div v-for="genre in genres" v-bind:key="genre.id" class="genreCard">
         <div v-bind:id="genre.id" @click="getBooks" class="book-link">
@@ -27,7 +27,7 @@
             </div>
             <div class="dropdown-menu" id="dropdown-menu" role="menu">
               <div class="dropdown-content">
-                <a href="#" class="dropdown-item" v-bind:id="genre.id" @click="editGenreFields">Edit</a>
+                <a class="dropdown-item" v-bind:id="genre.id" @click="editGenreFields">Edit</a>
                 <a class="dropdown-item" v-bind:id="genre.id" @click="deleteGenre">Delete</a>
               </div>
             </div>
@@ -94,8 +94,8 @@ export default {
   },
   methods: {
     createGenre: function(){
-      const {loggedIn, token, URL} = this.$route.query
-      this.loggedIn = loggedIn
+      const {token, URL} = this.$route.query
+      // this.loggedIn = loggedIn
       if (this.genreName === "") {
         this.alertEmptyField()
       } else {
@@ -105,7 +105,7 @@ export default {
           method: 'post',
           headers: {
             "Content-Type": "application/json",
-            authorization: `JWT ${token.token}`
+            authorization: `JWT ${token}`
           },
           body: JSON.stringify({
               name: this.genreName
@@ -153,9 +153,9 @@ export default {
     },
     getGenre: function(){
       // Pass from App the token, URL, and loggedIn
-      const {token, loggedIn, URL} = this.$route.query
-      this.tokenFromGenre = token.token
-      this.loggedIn = loggedIn
+      const {token, URL} = this.$route.query
+      this.tokenFromGenre = token
+      // this.loggedIn = loggedIn
       this.URL = URL
 
       fetch(`${this.URL}/library/genres/`, {
@@ -188,15 +188,15 @@ export default {
       this.editGenreName = oneGenre.name
     },
     updateGenre: function(){
-      const {token, loggedIn, URL} = this.$route.query
-      this.loggedIn = loggedIn
+      const {token, URL} = this.$route.query
+      // this.loggedIn = loggedIn
       this.editGenreName = this.nameGenre(this.editGenreName)
 
       fetch(`${URL}/library/genres/${this.genreUpdateId}/`, {
           method: 'put',
           headers: {
             "Content-Type": "application/json",
-            authorization: `JWT ${token.token}`
+            authorization: `JWT ${token}`
           },
           body: JSON.stringify({
               name: this.editGenreName
@@ -214,13 +214,13 @@ export default {
     },
     // DELETE GENRE
     deleteGenre: function(e){
-      const {token, loggedIn, URL} = this.$route.query
-      this.loggedIn = loggedIn
+      const {token, URL} = this.$route.query
+      // this.loggedIn = loggedIn
       this.genreId = e.target.id
       fetch(`${URL}/library/genres/${this.genreId}/`, {
           method: 'delete',
           headers: {
-            authorization: `JWT ${token.token}`
+            authorization: `JWT ${token}`
           }
       })
       .then(response => response.json())

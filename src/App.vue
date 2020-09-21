@@ -42,24 +42,38 @@ export default {
     // Token gets stored in App
     login: function(e){
       this.loggedIn = true
-      this.token = e
+      this.token = e.token
       console.log(this.token)
       // Send token down to Genre page after logging in (token is stored in data.$route.query) 
-      this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL, loggedIn: this.loggedIn}})
+      this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
     },
     logout: function(){
       console.log('Bye')
       this.loggedIn = false
       this.token = null
+      localStorage.clear()
       this.$router.push('/')
     },
     signup: function(e){
       this.loggedIn = true
-      this.token = e
+      this.token = e.token
       console.log(this.token)
       // Send token down to Genre page after registering (token is stored in data.$route.query) 
-      this.$router.push({path: 'Genre', query: {token: this.token, loggedIn: this.loggedIn, URL: this.URL}})
+      this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
     },
+  },
+  beforeMount(){
+    const checkLoggedIn = () => {
+      let isLoggedIn = localStorage.getItem('loggedIn')
+      console.log(isLoggedIn)
+      if(isLoggedIn == "true"){
+        this.token = localStorage.getItem("token")
+        return true
+      } else {
+        return false
+      }
+    }
+    this.loggedIn = checkLoggedIn()
   }
 }
 </script>
