@@ -53,7 +53,8 @@ export default {
             lastName: null,
             email: null,
             registerUsername: null,
-            registerPassword: null
+            registerPassword: null,
+            loggedIn: false
         }
     }, 
     methods: {
@@ -93,6 +94,14 @@ export default {
                         } 
                     } else {
                         this.$emit('registered', data)
+                        this.loggedIn = true
+                        this.token = data.token
+                    }
+                })
+                .then(() => {
+                    if(this.loggedIn){
+                        localStorage.setItem('token', this.token)
+                        localStorage.setItem('loggedIn', this.loggedIn)
                     }
                 })
             } else{

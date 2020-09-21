@@ -60,8 +60,6 @@ export default {
                         this.$emit('loggedIn', data)
                         this.loggedIn = true
                         this.token = data.token
-                        this.username = data.username
-                        this.email = data.email
                     }
                 })
                 .then(() => {
