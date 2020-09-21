@@ -54,7 +54,8 @@ export default {
             email: null,
             registerUsername: null,
             registerPassword: null,
-            loggedIn: false
+            loggedIn: false,
+            token: ""
         }
     }, 
     methods: {
