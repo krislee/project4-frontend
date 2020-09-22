@@ -158,11 +158,6 @@ export default {
     this.listBooks()
   },
   methods: {
-    // enterNewLine: function(e){
-    //   e.preventDefault()
-    //   this.editReview += '&#13;&#10';
-    //   console.log(this.editReview)
-    // },
     getOneBook: function(e){
       const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn

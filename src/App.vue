@@ -43,12 +43,10 @@ export default {
     login: function(e){
       this.loggedIn = true
       this.token = e.token
-      console.log(this.token)
       // Send token down to Genre page after logging in (token is stored in data.$route.query) 
       this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
     },
     logout: function(){
-      console.log('Bye')
       this.loggedIn = false
       this.token = null
       localStorage.clear()
@@ -57,7 +55,6 @@ export default {
     signup: function(e){
       this.loggedIn = true
       this.token = e.token
-      console.log(this.token)
       // Send token down to Genre page after registering (token is stored in data.$route.query) 
       this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
     },
@@ -65,7 +62,6 @@ export default {
   beforeMount(){
     const checkLoggedIn = () => {
       let isLoggedIn = localStorage.getItem('loggedIn')
-      console.log(isLoggedIn)
       if(isLoggedIn == "true"){
         this.token = localStorage.getItem("token")
         return true

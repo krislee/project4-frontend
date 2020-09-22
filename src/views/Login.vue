@@ -52,11 +52,9 @@ export default {
                 .then(response => response.json())
                 // Send the data with loggedIn event back up to App since data contains the token
                 .then(data => {
-                    console.log(data)
                     if(data.non_field_errors){
                         this.alertInvalidField()
                     } else{
-                        console.log(data.token)
                         this.$emit('loggedIn', data)
                         this.loggedIn = true
                         this.token = data.token
@@ -65,8 +63,6 @@ export default {
                 .then(() => {
                     if(this.loggedIn){
                         localStorage.setItem('token', this.token)
-                        // localStorage.setItem('username', this.username)
-                        // localStorage.setItem('email', this.email)
                         localStorage.setItem('loggedIn', this.loggedIn)
                     }
                 })

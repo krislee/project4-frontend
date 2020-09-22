@@ -100,7 +100,6 @@ export default {
         this.alertEmptyField()
       } else {
         this.genreName = this.nameGenre(this.genreName)
-        console.log(this.genreName)
         fetch(`${URL}/library/genres/`, {
           method: 'post',
           headers: {
@@ -166,13 +165,11 @@ export default {
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         if(data.count == 0){
           this.createGenrePage = true
           this.genres = []
         } else {
           this.genres = data.results
-          console.log(this.genres)
         }
       })
     },
