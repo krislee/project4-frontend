@@ -59,6 +59,7 @@ export default {
       this.$router.push({path: 'Genre', query: {token: this.token, URL: this.URL}})
     },
   },
+  // Local Storage
   beforeMount(){
     const checkLoggedIn = () => {
       let isLoggedIn = localStorage.getItem('loggedIn')

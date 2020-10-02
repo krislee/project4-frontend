@@ -2,7 +2,6 @@
   <div class="header">
     <b-navbar>
       <template slot="brand">
-        <!-- tag="router-link" :to="{ path: '/' }" -->
         <b-navbar-item>
           <h1><strong> B.C. </strong></h1>
         </b-navbar-item>
@@ -22,7 +21,6 @@
             <router-link :to="{name: 'Login', query: {URL: this.URL}}" 
             v-if="!loggedIn">Login
             </router-link>
-            <!-- <router-link to="/login" v-bind:URL="URL" v-if="!loggedIn" class="button is-primary">Login</router-link> -->
             <router-link :to="{name: 'Signup', query: {URL: this.URL}}" v-if="!loggedIn" >Sign up</router-link>
             <button v-if="loggedIn" v-on:click="logout" class="button is-light">Log Out</button>
           </div>

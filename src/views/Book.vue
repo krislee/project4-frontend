@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+    <b-input placeholder="Search Book Title or Author"></b-input>
+    <!-- <button @click="searchBook">Submit</button> -->
+    <div v-for="book of searchBook" v-bind:key="book.id" class="searchDiv">
+      <div v-bind:style='{ backgroundSize: "cover", backgroundImage: `url("${book.photo}")` }' @click="getOneBook"></div>
+    </div>
     <div class="create-button-container">
       <button class="addBook" @click="createCardModalActive = true"><i @click="createCardModalActive = true" class="fas fa-plus"></i></button>
     </div>
@@ -117,7 +122,7 @@ export default {
   },
   data: function(){
     return {
-      books: {},
+      books: [],
       loggedIn: false,
       // FOR NO BOOKS
       createBookPage: false,
@@ -151,7 +156,10 @@ export default {
       editImageURL: "",
       displayBookReviewAlert: false,
       editBookInfo: false,
-      editBookReview: false
+      editBookReview: false,
+      // SEARCH:
+      searchQuery: "",
+      searchBookDiv: false
     }
   },
   created: function(){
@@ -210,7 +218,7 @@ export default {
           // Div that states create books will not display since there are no books
           this.createBookPage = true
           // Even though on the server side the book is deleted the last book is still displayed so when the message that states there are no books after deleting the last book, we empty the books data
-          this.books = {}
+          this.books = []
         } else {
           // Loop through books data in template
           this.books = data.results
@@ -338,7 +346,7 @@ export default {
         this.editStat = 2
       }
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'put',
+        method: 'PATCH',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
@@ -376,7 +384,7 @@ export default {
       const {token, loggedIn, URL, genreId} = this.$route.query
       this.loggedIn = loggedIn
       fetch(`${URL}/library/genres/${genreId}/books/${this.bookId}`, {
-        method: 'put',
+        method: 'PATCH',
         headers: {
           "Content-Type": "application/json",
           authorization: `JWT ${token}`
@@ -433,6 +441,15 @@ export default {
         this.listBooks()
         this.editCardModalActive = false
         this.isCardModalActive = false
+      })
+    }
+  },
+  computed: {
+    // SEARCH
+    searchBook: function(){
+      console.log(this.books)
+      return this.books.filter((book) => {
+        return book.title.toLowerCase().match(this.searchQuery.toLowerCase()) || book.author.toLowerCase().match(this.searchQuery.toLowerCase())
       })
     }
   }

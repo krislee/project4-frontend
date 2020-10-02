@@ -154,7 +154,6 @@ export default {
       // Pass from App the token, URL, and loggedIn
       const {token, URL} = this.$route.query
       this.tokenFromGenre = token
-      // this.loggedIn = loggedIn
       this.URL = URL
 
       fetch(`${this.URL}/library/genres/`, {
@@ -186,7 +185,6 @@ export default {
     },
     updateGenre: function(){
       const {token, URL} = this.$route.query
-      // this.loggedIn = loggedIn
       this.editGenreName = this.nameGenre(this.editGenreName)
 
       fetch(`${URL}/library/genres/${this.genreUpdateId}/`, {
@@ -212,7 +210,6 @@ export default {
     // DELETE GENRE
     deleteGenre: function(e){
       const {token, URL} = this.$route.query
-      // this.loggedIn = loggedIn
       this.genreId = e.target.id
       fetch(`${URL}/library/genres/${this.genreId}/`, {
           method: 'delete',
